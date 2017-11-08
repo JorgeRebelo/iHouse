@@ -1,6 +1,6 @@
 package org.academiadecodigo.enuminatti.ihouse.server;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -37,18 +37,14 @@ public class Server {
             e.printStackTrace();
         }
 
-
-
-
-
-
     }
 
-    public void start(ServerSocket socket){
+    public void start(ServerSocket socket) {
 
-        while(true){
+        while (true) {
             try {
                 Socket clientSocket = socket.accept();
+                System.out.println("connect");
                 ServerWorker svWorker = new ServerWorker(clientSocket);
                 threadPool.submit(svWorker);
                 workerList.add(svWorker);
@@ -56,25 +52,36 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
-
-
-
-
+    
     public class ServerWorker implements Runnable {
 
-        Socket clientSocket;
+        private Socket clientSocket;
+        private BufferedReader reader;
+        private BufferedWriter writer;
 
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
+            try {
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         public void run() {
+            while (true) {
+                try {
+                    String input = reader.readLine();
+                    System.out.println(input);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+            }
         }
     }
 }
