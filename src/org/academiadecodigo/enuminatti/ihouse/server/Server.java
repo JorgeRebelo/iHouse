@@ -48,6 +48,7 @@ public class Server {
                 ServerWorker svWorker = new ServerWorker(clientSocket);
                 threadPool.submit(svWorker);
                 workerList.add(svWorker);
+                svWorker.run();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -60,12 +61,13 @@ public class Server {
         private Socket clientSocket;
         private BufferedReader reader;
         private BufferedWriter writer;
+        private String input;
 
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                writer = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream()));
+                writer = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream(), true));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -75,7 +77,7 @@ public class Server {
         public void run() {
             while (true) {
                 try {
-                    String input = reader.readLine();
+                    input = reader.readLine();
                     System.out.println(input);
                 } catch (IOException e) {
                     e.printStackTrace();
