@@ -60,7 +60,7 @@ public class Server {
     public class ServerWorker implements Runnable {
 
         private Socket clientSocket;
-        private String input;
+        private String clientMessage;
         private BufferedReader reader;
         private PrintWriter writer;
 
@@ -68,7 +68,7 @@ public class Server {
             this.clientSocket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                writer = new PrintWriter((clientSocket.getOutputStream()));
+                //writer = new PrintWriter((clientSocket.getOutputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,25 +78,34 @@ public class Server {
 
         @Override
         public void run() {
-            try {
-                while ((input = reader.readLine()) != null) {
-                    System.out.println("Server: " + input);
-                    for (int i = 0; i < workerList.size(); i++) {
-
-                        //
-                        // workerList.get(i).clientSocket.getOutputStream().write(input.getBytes(),0,input.length());
-                            workerList.get(i).writer.println("Server broadcast " + input);
-                            writer.flush();
-                        //clientList.get(i).outFromClient.write(message,0,message.length());
-                        System.out.println("Sent " + (i + 1) + clientSocket.getOutputStream());
-                        System.out.println(workerList);
-                        if (input.equals("Bye."))
-                            break;
-                    /*input = reader.readLine();
-                    System.out.println(input + " is the message");
-                    writer.write(input, 0, input.length());*/
-                    }
+            while (true) {
+                try {
+                    clientMessage = reader.readLine();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
+                System.out.println("Server: " + clientMessage);
+                broadcast((clientMessage + "\n").getBytes());
+                //clientList.get(i).outFromClient.write(message,0,message.length());
+                System.out.println("Sent message from server: " + clientMessage);
+                if (clientMessage.equals("Bye."))
+                    break;
+                /*input = reader.readLine();
+                System.out.println(input + " is the message");
+                writer.write(input, 0, input.length());*/
+            }
+        }
+    }
+
+
+
+
+    public void broadcast(byte[] message){
+        for (int i = 0; i < workerList.size(); i++) {
+            try {
+                workerList.get(i).clientSocket.getOutputStream().write(message);
+                workerList.get(i).clientSocket.getOutputStream().flush();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

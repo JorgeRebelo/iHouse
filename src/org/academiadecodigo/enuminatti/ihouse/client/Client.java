@@ -47,22 +47,15 @@ class SendThread implements Runnable {
         try {
 
             while (true) {
-                writer = new PrintWriter(socket.getOutputStream());
 
                 reader = new BufferedReader(new InputStreamReader(System.in));
+                writer = new PrintWriter(socket.getOutputStream());
 
-                String command = null;
+                String command;
 
-
-                try {
-                    command = reader.readLine();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                if (command != null) {
+                while((command = reader.readLine()) != null){
                     System.out.println("Client: " + command);
                     writer.println(command);
-                    writer.flush();
                 }
             }
 
