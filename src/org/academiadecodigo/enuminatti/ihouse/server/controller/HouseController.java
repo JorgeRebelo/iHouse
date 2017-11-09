@@ -28,9 +28,6 @@ public class HouseController implements Controller {
     @FXML // fx:id="exitButton"
     private Button exitButton; // Value injected by FXMLLoader
 
-    @FXML // fx:id="logOutButton"
-    private Button logOutButton; // Value injected by FXMLLoader
-
     @FXML
     void onBathroomLightButton(ActionEvent event) {
 
@@ -104,11 +101,6 @@ public class HouseController implements Controller {
     }
 
     @FXML
-    void onLogoutButton(ActionEvent event) {
-
-    }
-
-    @FXML
     void onMasterBedroomLightButton(ActionEvent event) {
 
         if (masterBedroomLightButton.getText().equals("OFF")) {
@@ -124,4 +116,6 @@ public class HouseController implements Controller {
         }
 
     }
+
+
 }

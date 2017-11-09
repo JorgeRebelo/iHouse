@@ -5,6 +5,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController">
    <children>
@@ -20,7 +21,10 @@
       <Button fx:id="bathroomLightButton" layoutX="120.0" layoutY="51.0" mnemonicParsing="false" onAction="#onBathroomLightButton" text="OFF" />
       <Button fx:id="exitButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="40.0" prefWidth="126.0" text="EXIT" />
       <Button fx:id="logOutButton" layoutX="400.0" layoutY="321.0" mnemonicParsing="false" onAction="#onLogoutButton" prefHeight="40.0" prefWidth="126.0" text="LOGOUT" />
-      <Label layoutX="398.0" layoutY="219.0" rotate="90.0" text="Some text goes were" />
+      <Label layoutX="364.0" layoutY="196.0" rotate="-90.0" text="CLIENT">
+         <font>
+            <Font size="50.0" />
+         </font></Label>
       <ImageView fitHeight="129.0" fitWidth="126.0" layoutX="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@/iHouse_logo.png" />
