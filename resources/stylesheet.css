@@ -1,0 +1,11 @@
+.root{
+    -fx-background-color: black;
+
+}.ON{
+    -fx-background-color: yellow;
+}
+
+.OFF{
+    -fx-background-color: azure;
+}
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="401.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/home_layout.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="masterBedroomLightButton" layoutX="284.0" layoutY="71.0" mnemonicParsing="false" onAction="#onMasterBedroomLightButton" text="OFF" />
+      <Button fx:id="bedroomLightButton" layoutX="284.0" layoutY="200.0" mnemonicParsing="false" onAction="#onBedroomLightButton" text="OFF" />
+      <Button fx:id="livingroomLightButton" layoutX="61.0" layoutY="260.0" mnemonicParsing="false" onAction="#onLivingroomLightButton" text="OFF" />
+      <Button fx:id="kitchenLightButton" layoutX="212.0" layoutY="321.0" mnemonicParsing="false" onAction="#onKitchenLightButton" text="OFF" />
+      <Button fx:id="bathroomLightButton" layoutX="120.0" layoutY="51.0" mnemonicParsing="false" onAction="#onBathroomLightButton" text="OFF" />
+      <Button fx:id="exitButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="40.0" prefWidth="126.0" text="EXIT" />
+      <Button fx:id="logOutButton" layoutX="400.0" layoutY="321.0" mnemonicParsing="false" onAction="#onLogoutButton" prefHeight="40.0" prefWidth="126.0" text="LOGOUT" />
+      <Label layoutX="398.0" layoutY="219.0" rotate="90.0" text="Some text goes were" />
+      <ImageView fitHeight="129.0" fitWidth="126.0" layoutX="400.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/iHouse_logo.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
