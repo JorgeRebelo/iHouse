@@ -43,25 +43,26 @@ public class Server {
 
         while (true) {
             try {
-                Socket clientSocket = socket.accept();
-                System.out.println("connect");
+                Socket clientSocket;
+                System.out.println("One more client...");
+                clientSocket = socket.accept();
+                System.out.println("connect " + clientSocket.getPort());
                 ServerWorker svWorker = new ServerWorker(clientSocket);
                 threadPool.submit(svWorker);
                 workerList.add(svWorker);
-                svWorker.run();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     public class ServerWorker implements Runnable {
 
         private Socket clientSocket;
+        private String input;
         private BufferedReader reader;
         private BufferedWriter writer;
-        private String input;
 
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
@@ -71,19 +72,32 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
+
 
         @Override
         public void run() {
-            while (true) {
-                try {
-                    input = reader.readLine();
-                    System.out.println(input);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                while ((input = reader.readLine()) != null) {
+                    System.out.println("Server: " + input);
+                    for (int i = 0; i < workerList.size(); i++) {
+                            //workerList.get(i).clientSocket.getOutputStream().write(input.getBytes(),0,input.length());
+                            workerList.get(i).writer.write(input);
+                        //clientList.get(i).outFromClient.write(message,0,message.length());
+                        System.out.println("Sent " + (i + 1) + " message");
+                        System.out.println(workerList);
+                        if (input.equals("Bye."))
+                            break;
+                    /*input = reader.readLine();
+                    System.out.println(input + " is the message");
+                    writer.write(input, 0, input.length());*/
+                    }
                 }
-
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 }
+
