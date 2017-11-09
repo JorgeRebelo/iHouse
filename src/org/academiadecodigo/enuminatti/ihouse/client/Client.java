@@ -46,8 +46,8 @@ class SendThread implements Runnable {
 
         try {
 
-            writer = new PrintWriter(socket.getOutputStream());
             while (true) {
+                writer = new PrintWriter(socket.getOutputStream());
 
                 reader = new BufferedReader(new InputStreamReader(System.in));
 

@@ -44,8 +44,8 @@ public class Server {
         while (true) {
             try {
                 Socket clientSocket;
-                System.out.println("One more client...");
                 clientSocket = socket.accept();
+                System.out.println("One more client...");
                 System.out.println("connect " + clientSocket.getPort());
                 ServerWorker svWorker = new ServerWorker(clientSocket);
                 threadPool.submit(svWorker);
@@ -62,13 +62,13 @@ public class Server {
         private Socket clientSocket;
         private String input;
         private BufferedReader reader;
-        private BufferedWriter writer;
+        private PrintWriter writer;
 
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                writer = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream(), true));
+                writer = new PrintWriter((clientSocket.getOutputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -82,10 +82,13 @@ public class Server {
                 while ((input = reader.readLine()) != null) {
                     System.out.println("Server: " + input);
                     for (int i = 0; i < workerList.size(); i++) {
-                            //workerList.get(i).clientSocket.getOutputStream().write(input.getBytes(),0,input.length());
-                            workerList.get(i).writer.write(input);
+
+                        //
+                        // workerList.get(i).clientSocket.getOutputStream().write(input.getBytes(),0,input.length());
+                            workerList.get(i).writer.println("Server broadcast " + input);
+                            writer.flush();
                         //clientList.get(i).outFromClient.write(message,0,message.length());
-                        System.out.println("Sent " + (i + 1) + " message");
+                        System.out.println("Sent " + (i + 1) + clientSocket.getOutputStream());
                         System.out.println(workerList);
                         if (input.equals("Bye."))
                             break;
