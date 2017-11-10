@@ -19,19 +19,9 @@ public class Main extends Application {
     }
 
     @Override
-    public void init() {
-
-        userService = new MockUserService();
-        userService.addUser(new User("admin", Security.getHash("admin")));
-    }
-
-    @Override
     public void start(Stage primaryStage) {
 
-        Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("login");
-        LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
-        loginController.setUserService(userService);
+
     }
 
 }

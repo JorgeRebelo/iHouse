@@ -17,13 +17,21 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 07/11/17.
  */
-public class Server {
-//will extend application
+public class Server extends Application{
+
+    //will extend application
 
     private ExecutorService threadPool;
     private LinkedList<ServerWorker> workerList;
 
     public Server() {
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+
 
     }
 

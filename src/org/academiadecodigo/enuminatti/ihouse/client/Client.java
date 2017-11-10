@@ -1,10 +1,13 @@
 package org.academiadecodigo.enuminatti.ihouse.client;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
+import org.academiadecodigo.enuminatti.ihouse.client.model.User;
+import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
+import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
+import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
+import org.academiadecodigo.enuminatti.ihouse.client.utils.Security;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,34 +19,43 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 31/10/17.
  */
-public class Client {
+public class Client extends Application{
 
-    /*@Override
-    public void start(Stage primaryStage) throws Exception {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("view/house.fxml"));
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
+    private UserService userService;
+    private Socket clientSocket;
+    private ExecutorService executors = Executors.newFixedThreadPool(2);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }*/
-    public static void main(String[] args) throws IOException {
+    @Override
+    public void init() {
 
         try {
-            Socket clientSocket = new Socket("localhost", 8080);
-            SendThread sendThread = new SendThread(clientSocket);
-            Thread thread = new Thread(sendThread);
-            thread.start();
-            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
-            Thread thread2 = new Thread(receiveThread);
-            thread2.start();
+            Client client = new Client();
+            client.clientSocket = new Socket("localhost", 8080);
+            SendThread sendThread = new SendThread(client.clientSocket);
+            ReceiveThread receiveThread = new ReceiveThread(client.clientSocket);
+            client.executors.submit(sendThread);
+            client.executors.submit(receiveThread);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Couldn't connect.");
         }
+
+        userService = new MockUserService();
+        userService.addUser(new User("admin", Security.getHash("admin")));
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Navigation.getInstance().setStage(primaryStage);
+        Navigation.getInstance().loadScreen("login");
+        LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
+        loginController.setUserService(userService);
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        launch(args);
     }
 }
 
