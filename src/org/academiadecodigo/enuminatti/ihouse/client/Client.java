@@ -29,23 +29,26 @@ public class Client extends Application{
     public void init() {
 
         try {
-            Client client = new Client();
-            client.clientSocket = new Socket("localhost", 8080);
-            SendThread sendThread = new SendThread(client.clientSocket);
-            ReceiveThread receiveThread = new ReceiveThread(client.clientSocket);
-            client.executors.submit(sendThread);
-            client.executors.submit(receiveThread);
+            //Initialize threads, sockets
+            clientSocket = new Socket("localhost", 8080);
+            SendThread sendThread = new SendThread(clientSocket);
+            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
+            //add threads to threadpool
+            executors.submit(sendThread);
+            executors.submit(receiveThread);
 
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
         }
 
+        //Initialize service
         userService = new MockUserService();
         userService.addUser(new User("admin", Security.getHash("admin")));
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //show UI
         Navigation.getInstance().setStage(primaryStage);
         Navigation.getInstance().loadScreen("login");
         LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
@@ -67,18 +70,19 @@ class SendThread implements Runnable {
         this.clientSocket = clientSocket;
     }
 
+    //write command to server
     public void write() {
 
         Scanner scanner = new Scanner(System.in);
 
         String sentence;
-
+        //read from command
         sentence = scanner.nextLine();
 
         BufferedWriter outToServer;
         try {
             outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
+            //send command to server
             outToServer.write(sentence);
             System.out.println(Thread.currentThread().getName() + " on write");
             outToServer.newLine();
@@ -104,7 +108,7 @@ class ReceiveThread implements Runnable {
         this.clientSocket=clientSocket;
     }
 
-
+    //receive status
     public void read() {
 
         BufferedReader bufferedReader = null;
