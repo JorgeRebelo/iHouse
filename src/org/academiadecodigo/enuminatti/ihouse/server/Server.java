@@ -24,12 +24,32 @@ public class Server extends Application{
     private ExecutorService threadPool;
     private LinkedList<ServerWorker> workerList;
 
-    public Server() {
+    private ServerSocket svSocket;
+
+    @Override
+    public void init() throws Exception {
+
+        threadPool = Executors.newCachedThreadPool();
+        workerList = new LinkedList<>();
+        svSocket = new ServerSocket(8080);
+        AcceptClients acceptThread = new AcceptClients(svSocket);
+        threadPool.submit(acceptThread);
 
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("view/house.fxml"));
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -38,25 +58,7 @@ public class Server extends Application{
     public static void main(String[] args) {
 
 
-        Server server = new Server();
-        server.threadPool = Executors.newCachedThreadPool();
-        server.workerList = new LinkedList<>();
-
-        ServerSocket svSocket;
-
-        try {
-            svSocket = new ServerSocket(8080);
-            AcceptClients acceptThread = server.new AcceptClients(svSocket);
-            server.threadPool.submit(acceptThread);
-            while (true) {
-                System.out.println("tas na boa");
-                Thread.sleep(2000);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException o) {
-            System.out.println("Interrupted..");
-        }
+        launch();
     }
 
 
