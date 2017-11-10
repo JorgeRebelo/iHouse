@@ -29,12 +29,11 @@ public class Client extends Application{
     public void init() {
 
         try {
-            Client client = new Client();
-            client.clientSocket = new Socket("localhost", 8080);
-            SendThread sendThread = new SendThread(client.clientSocket);
-            ReceiveThread receiveThread = new ReceiveThread(client.clientSocket);
-            client.executors.submit(sendThread);
-            client.executors.submit(receiveThread);
+            clientSocket = new Socket("localhost", 8080);
+            SendThread sendThread = new SendThread(clientSocket);
+            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
+            executors.submit(sendThread);
+            executors.submit(receiveThread);
 
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
@@ -48,6 +47,7 @@ public class Client extends Application{
     public void start(Stage primaryStage) throws Exception {
         Navigation.getInstance().setStage(primaryStage);
         Navigation.getInstance().loadScreen("login");
+        Navigation.getInstance().getController("login");
         LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
         loginController.setUserService(userService);
 

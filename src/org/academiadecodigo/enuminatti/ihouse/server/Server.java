@@ -1,11 +1,14 @@
 package org.academiadecodigo.enuminatti.ihouse.server;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.academiadecodigo.enuminatti.ihouse.server.controller.Controller;
+import org.academiadecodigo.enuminatti.ihouse.server.controller.HouseController;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -23,8 +26,8 @@ public class Server extends Application{
 
     private ExecutorService threadPool;
     private LinkedList<ServerWorker> workerList;
-
     private ServerSocket svSocket;
+    private HouseController controller;
 
     @Override
     public void init() throws Exception {
@@ -41,7 +44,10 @@ public class Server extends Application{
     public void start(Stage primaryStage) throws Exception {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("view/house.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/house.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = loader.<HouseController>getController();
+
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
 
@@ -56,7 +62,6 @@ public class Server extends Application{
     }
 
     public static void main(String[] args) {
-
 
         launch();
     }
@@ -135,6 +140,7 @@ public class Server extends Application{
                 }
 
                 System.out.println("Server: " + clientMessage);
+                controller.changeButtonText();
                 broadcast((clientMessage + "\n").getBytes());
                 System.out.println("Sent message from server: " + clientMessage);
 

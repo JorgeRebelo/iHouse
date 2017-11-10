@@ -14,11 +14,11 @@
             <Image url="@/home_layout.png" />
          </image>
       </ImageView>
-      <Button fx:id="masterBedroomLightButton" layoutX="284.0" layoutY="71.0" mnemonicParsing="false" onAction="#onMasterBedroomLightButton" text="OFF" />
-      <Button fx:id="bedroomLightButton" layoutX="284.0" layoutY="200.0" mnemonicParsing="false" onAction="#onBedroomLightButton" text="OFF" />
-      <Button fx:id="livingroomLightButton" layoutX="61.0" layoutY="260.0" mnemonicParsing="false" onAction="#onLivingroomLightButton" text="OFF" />
-      <Button fx:id="kitchenLightButton" layoutX="212.0" layoutY="321.0" mnemonicParsing="false" onAction="#onKitchenLightButton" text="OFF" />
-      <Button fx:id="bathroomLightButton" layoutX="120.0" layoutY="51.0" mnemonicParsing="false" onAction="#onBathroomLightButton" text="OFF" />
+      <Button fx:id="masterBedroomLightButton" layoutX="284.0" layoutY="71.0" mnemonicParsing="false" text="OFF" />
+      <Button fx:id="bedroomLightButton" layoutX="284.0" layoutY="200.0" mnemonicParsing="false" text="OFF" />
+      <Button fx:id="livingroomLightButton" layoutX="61.0" layoutY="260.0" mnemonicParsing="false" text="OFF" />
+      <Button fx:id="kitchenLightButton" layoutX="212.0" layoutY="321.0" mnemonicParsing="false" text="OFF" />
+      <Button fx:id="bathroomLightButton" layoutX="120.0" layoutY="51.0" mnemonicParsing="false" text="OFF" />
       <Button fx:id="exitButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="40.0" prefWidth="126.0" text="EXIT" />
       <Label layoutX="357.0" layoutY="214.0" rotate="-90.0" text="SERVER">
          <font>
@@ -29,5 +29,10 @@
             <Image url="@/iHouse_logo.png" />
          </image>
       </ImageView>
+      <Label fx:id="cenasLabel" layoutX="365.0" layoutY="205.0" rotate="-90.0" text="ghjgh">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
