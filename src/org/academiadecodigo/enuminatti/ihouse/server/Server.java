@@ -2,7 +2,6 @@ package org.academiadecodigo.enuminatti.ihouse.server;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,6 +31,7 @@ public class Server extends Application{
     @Override
     public void init() throws Exception {
 
+        //Initialize threads, sockets, lists and add threads to threadpool
         threadPool = Executors.newCachedThreadPool();
         workerList = new LinkedList<>();
         svSocket = new ServerSocket(8080);
@@ -44,10 +44,14 @@ public class Server extends Application{
     public void start(Stage primaryStage) throws Exception {
 
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/house.fxml"));
             Parent root = (Parent) loader.load();
+
+            //Get controller for this view and associate it to a local variable
             controller = loader.<HouseController>getController();
 
+            //Show UI
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
 
@@ -81,7 +85,7 @@ public class Server extends Application{
 
             while (true) {
 
-                //Blocking method accepting clients
+                //Blocking method. Accepting clients
                 try {
                     Socket clientSocket;
                     clientSocket = svSocket.accept();
@@ -113,7 +117,8 @@ public class Server extends Application{
 
         }
 
-        public void tryClose() {
+        //Close socket/buffer
+        public void close() {
 
             try {
                 reader.close();
@@ -129,10 +134,11 @@ public class Server extends Application{
             while (true) {
 
                 try {
+                    //read command from client
                     clientMessage = reader.readLine();
                     if (clientMessage.equals("null")) {
                         System.out.println("Client disconnected");
-                        tryClose();
+                        close();
                         break;
                     }
                 } catch (IOException e) {
@@ -148,6 +154,7 @@ public class Server extends Application{
         }
     }
 
+    //send commands to all clients/ BROADCAST
     public void broadcast(byte[] message) {
 
         for (int i = 0; i < workerList.size(); i++) {
