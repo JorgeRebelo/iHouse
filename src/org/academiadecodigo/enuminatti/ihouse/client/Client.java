@@ -16,9 +16,9 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 31/10/17.
  */
-public class Client extends Application implements Runnable{
+public class Client {
 
-    @Override
+    /*@Override
     public void start(Stage primaryStage) throws Exception {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("view/house.fxml"));
@@ -29,24 +29,30 @@ public class Client extends Application implements Runnable{
             e.printStackTrace();
         }
 
-    }
-
-    private ExecutorService executor;
-    private Socket clientSocket;
-    private Thread thread;
-    boolean keepRead = true;
-
-    public Client() {
+    }*/
+    public static void main(String[] args) throws IOException {
 
         try {
-            clientSocket = new Socket("localhost", 8080);
-            executor = Executors.newFixedThreadPool(3);
-            executor.submit(this);
-            System.out.println(Thread.currentThread().getName() + " on constructor");
-            System.out.println(Thread.activeCount());
-        } catch (IOException e) {
-            e.printStackTrace();
+            Socket clientSocket = new Socket("localhost", 8080);
+            SendThread sendThread = new SendThread(clientSocket);
+            Thread thread = new Thread(sendThread);
+            thread.start();
+            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
+            Thread thread2 = new Thread(receiveThread);
+            thread2.start();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+    }
+}
+
+class SendThread implements Runnable {
+
+    private Socket clientSocket;
+
+    public SendThread(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
     public void write() {
@@ -70,51 +76,63 @@ public class Client extends Application implements Runnable{
             e.printStackTrace();
         }
     }
+    @Override
+    public void run() {
+        while (true) {
+            write();
+        }
+    }
+}
+
+class ReceiveThread implements Runnable {
+    private Socket clientSocket;
+    boolean keepRead;
+
+    public ReceiveThread(Socket clientSocket) {
+        this.clientSocket=clientSocket;
+    }
+
 
     public void read() {
 
+        BufferedReader bufferedReader = null;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            String sentence = bufferedReader.readLine();
-            System.out.println(Thread.currentThread().getName() + " on read");
-
-            if (sentence == null) {
-
-                clientSocket.close();
-                thread.interrupt();
-                keepRead = false;
-
-            } else {
-
-                System.out.println(sentence);
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
-    }
 
-    public static void main(String[] args) {
+        String sentence = null;
+        try {
+            sentence = bufferedReader.readLine();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName() + " on read");
 
-        Client client = new Client();
+        if (sentence == null) {
 
-        client.thread = new Thread(client);
-        client.thread.start();
-        //launch();
+            try {
+                clientSocket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            //thread.interrupt();
 
-        while (true) {
 
-            client.write();
+        } else {
+
+            System.out.println(sentence);
+
         }
     }
 
     @Override
     public void run() {
-
-        while (keepRead) {
+        while (!keepRead) {
             read();
         }
+
     }
 }
+
