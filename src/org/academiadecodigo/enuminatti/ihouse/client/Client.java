@@ -39,7 +39,7 @@ public class Client extends Application {
             executors.submit(sendThread);
             executors.submit(receiveThread);
 
-            controller = (HouseController) Navigation.getInstance().getController("house");
+
             System.out.println(controller);
 
         } catch (Exception e) {
@@ -55,8 +55,9 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws Exception {
         //show UI
         Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("login");
+        Navigation.getInstance().loadScreen("house");
         Navigation.getInstance().getController("login");
+        controller = (HouseController) Navigation.getInstance().getController("house");
         LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
         loginController.setUserService(userService);
 
