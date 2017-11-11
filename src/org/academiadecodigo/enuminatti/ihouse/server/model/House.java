@@ -21,9 +21,9 @@ public class House {
     }
 
     public void putLamps() {
-        lamps.put("masterBedroomLightButton", 0);
+        lamps.put("masterBedroomLightButton", 7);
         lamps.put("bedroomLightButton", 0);
-        lamps.put("livingroomLightButton", 1);
+        lamps.put("livingroomLightButton", 0);
         lamps.put("kitchenLightButton", 0);
         lamps.put("bathroomLightButton", 0);
     }
@@ -43,6 +43,7 @@ public class House {
     public void receiveUpdate(String state) {
 
         String[] lamp = state.split("/");
+        System.out.println("Reached recieveUpdate");
 
         for (int i = 0; i < lamp.length ; i++) {
 

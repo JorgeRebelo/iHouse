@@ -127,12 +127,25 @@ public class HouseController implements Controller {
 
     }
 
-    public void doAction(){
+    public void doAction(String status){
         System.out.println("Cheguei");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                masterBedroomLightButton.setText("qwudhbquwbduhb");
+
+                String[] lamp = status.split("/");
+                System.out.println("Reached recieveUpdate");
+
+                for (int i = 0; i < lamp.length ; i++) {
+
+                    String[] status = lamp[i].split("=");
+
+                    switch(status[0]){
+                        case "masterBedroomLightButton":
+                            masterBedroomLightButton.setText(status[1]);
+                            break;
+                    }
+                }
             }
         });
     }

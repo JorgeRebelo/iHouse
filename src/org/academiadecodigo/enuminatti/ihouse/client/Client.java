@@ -25,11 +25,39 @@ public class Client extends Application {
     private UserService userService;
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
-    HouseController controller;
+    private HouseController controller;
 
     @Override
     public void init() {
 
+        /*try {
+            //Initialize threads, sockets
+            clientSocket = new Socket("localhost", 8080);
+            SendThread sendThread = new SendThread(clientSocket);
+            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
+            //add threads to threadpool
+            executors.submit(sendThread);
+            executors.submit(receiveThread);
+
+
+        } catch (Exception e) {
+            System.out.println("Couldn't connect.");
+        }*/
+
+        //Initialize service
+        userService = new MockUserService();
+        userService.addUser(new User("admin", Security.getHash("admin")));
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        //show UI
+        Navigation.getInstance().setStage(primaryStage);
+        Navigation.getInstance().loadScreen("house");
+        HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
+        //loginController.setUserService(userService);
+        controller = houseController;
+        System.out.println(controller);
         try {
             //Initialize threads, sockets
             clientSocket = new Socket("localhost", 8080);
@@ -43,21 +71,6 @@ public class Client extends Application {
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
         }
-
-        //Initialize service
-        userService = new MockUserService();
-        userService.addUser(new User("admin", Security.getHash("admin")));
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        //show UI
-        Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("house");
-        HouseController loginController = (HouseController) Navigation.getInstance().getController("house");
-        //loginController.setUserService(userService);
-        controller = loginController;
-        System.out.println(controller);
 
     }
 
@@ -103,12 +116,12 @@ public class Client extends Application {
         public void run() {
             while (true) {
                 write();
-                controller.doAction();
             }
         }
     }
 
     class ReceiveThread implements Runnable {
+
         private Socket clientSocket;
         boolean keepRead;
 
@@ -129,10 +142,15 @@ public class Client extends Application {
             String sentence = null;
             try {
                 sentence = bufferedReader.readLine();
+
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
             System.out.println(Thread.currentThread().getName() + " on read");
+
+            System.out.println("READING NOW");
+            controller.doAction(sentence);
+
 
             if (sentence == null) {
 
@@ -155,7 +173,6 @@ public class Client extends Application {
             while (!keepRead) {
                 read();
             }
-
         }
     }
 }
