@@ -19,65 +19,44 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 07/11/17.
  */
-public class Server extends Application{
+public class Server {
 
-    //will extend application
+    //will extend application, someday..
 
     private ExecutorService threadPool;
     private LinkedList<ServerWorker> workerList;
     private ServerSocket svSocket;
-    private HouseController controller;
 
-    @Override
-    public void init() throws Exception {
+    public static void main(String[] args) {
 
-        //Initialize threads, sockets, lists and add threads to threadpool
-        threadPool = Executors.newCachedThreadPool();
-        workerList = new LinkedList<>();
-        svSocket = new ServerSocket(8080);
-        AcceptClients acceptThread = new AcceptClients(svSocket);
-        threadPool.submit(acceptThread);
-
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+        //Initialize a server, a thread pool and a worker list
+        Server server = new Server();
+        server.threadPool = Executors.newCachedThreadPool();
+        server.workerList = new LinkedList<>();
 
         try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/house.fxml"));
-            Parent root = (Parent) loader.load();
-
-            //Get controller for this view and associate it to a local variable
-            controller = loader.<HouseController>getController();
-
-            //Show UI
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-
-
-
+            server.svSocket = new ServerSocket(8080);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
+        //Create a new thread accepting clients
+        AcceptClients acceptThread = server.new AcceptClients(server.svSocket);
+        server.threadPool.submit(acceptThread);
 
     }
 
-    public static void main(String[] args) {
-
-        launch();
-    }
 
 
     class AcceptClients implements Runnable {
 
         ServerSocket svSocket;
 
+        //Constructor
         public AcceptClients(ServerSocket svSocket) {
             this.svSocket = svSocket;
         }
+
 
         @Override
         public void run() {
@@ -117,17 +96,6 @@ public class Server extends Application{
 
         }
 
-        //Close socket/buffer
-        public void close() {
-
-            try {
-                reader.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         @Override
         public void run() {
 
@@ -138,7 +106,7 @@ public class Server extends Application{
                     clientMessage = reader.readLine();
                     if (clientMessage.equals("null")) {
                         System.out.println("Client disconnected");
-                        close();
+                        disconnect();
                         break;
                     }
                 } catch (IOException e) {
@@ -146,16 +114,28 @@ public class Server extends Application{
                 }
 
                 System.out.println("Server: " + clientMessage);
-                controller.changeButtonText();
                 broadcast((clientMessage + "\n").getBytes());
                 System.out.println("Sent message from server: " + clientMessage);
 
             }
         }
+
+        //Close socket/buffer
+        private void disconnect() {
+
+            try {
+                reader.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
     //send commands to all clients/ BROADCAST
-    public void broadcast(byte[] message) {
+    private void broadcast(byte[] message) {
 
         for (int i = 0; i < workerList.size(); i++) {
 

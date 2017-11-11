@@ -63,6 +63,7 @@ public class LoginController implements Controller {
 
         if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
             Navigation.getInstance().loadScreen("house");
+
         } else {
             wrongPasswordLabel.setVisible(true);
         }

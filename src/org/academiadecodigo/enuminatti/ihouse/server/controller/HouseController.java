@@ -14,8 +14,6 @@ import org.academiadecodigo.enuminatti.ihouse.server.Server;
  */
 public class HouseController implements Controller {
 
-    private Server server;
-
 
     @FXML // fx:id="masterBedroomLightButton"
     private Button masterBedroomLightButton; // Value injected by FXMLLoader

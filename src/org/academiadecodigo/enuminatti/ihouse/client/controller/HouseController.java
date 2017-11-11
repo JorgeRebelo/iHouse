@@ -126,4 +126,14 @@ public class HouseController implements Controller {
         }
 
     }
+
+    public void doAction(){
+        System.out.println("Cheguei");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                masterBedroomLightButton.setText("qwudhbquwbduhb");
+            }
+        });
+    }
 }

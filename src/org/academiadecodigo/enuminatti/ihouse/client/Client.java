@@ -2,6 +2,7 @@ package org.academiadecodigo.enuminatti.ihouse.client;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.client.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
@@ -19,11 +20,12 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 31/10/17.
  */
-public class Client extends Application{
+public class Client extends Application {
 
     private UserService userService;
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
+    HouseController controller;
 
     @Override
     public void init() {
@@ -36,6 +38,9 @@ public class Client extends Application{
             //add threads to threadpool
             executors.submit(sendThread);
             executors.submit(receiveThread);
+
+            controller = (HouseController) Navigation.getInstance().getController("house");
+            System.out.println(controller);
 
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
@@ -61,95 +66,102 @@ public class Client extends Application{
 
         launch(args);
     }
-}
 
-class SendThread implements Runnable {
+    class SendThread implements Runnable {
 
-    private Socket clientSocket;
+        private Socket clientSocket;
 
-    public SendThread(Socket clientSocket) {
-        this.clientSocket = clientSocket;
-    }
-
-    //write command to server
-    public void write() {
-
-        Scanner scanner = new Scanner(System.in);
-
-        String sentence;
-        //read from command
-        sentence = scanner.nextLine();
-
-        BufferedWriter outToServer;
-        try {
-            outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            //send command to server
-            outToServer.write(sentence);
-            System.out.println(Thread.currentThread().getName() + " on write");
-            outToServer.newLine();
-            outToServer.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void run() {
-        while (true) {
-            write();
-        }
-    }
-}
-
-class ReceiveThread implements Runnable {
-    private Socket clientSocket;
-    boolean keepRead;
-
-    public ReceiveThread(Socket clientSocket) {
-        this.clientSocket=clientSocket;
-    }
-
-    //receive status
-    public void read() {
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        public SendThread(Socket clientSocket) {
+            this.clientSocket = clientSocket;
         }
 
-        String sentence = null;
-        try {
-            sentence = bufferedReader.readLine();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        System.out.println(Thread.currentThread().getName() + " on read");
+        //write command to server
+        public void write() {
 
-        if (sentence == null) {
+            Scanner scanner = new Scanner(System.in);
 
+            String sentence;
+            //read from command
+            sentence = scanner.nextLine();
+
+            BufferedWriter outToServer;
             try {
-                clientSocket.close();
+                outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                //send command to server
+                outToServer.write(sentence);
+                System.out.println(Thread.currentThread().getName() + " on write");
+                outToServer.newLine();
+                outToServer.flush();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("RETURNING FROM WRITE");
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                write();
+                System.out.println("WTF");
+                System.out.println("CTRL " + controller);
+                System.out.println(controller.getClass().getSimpleName());
+                controller.doAction();
+                System.out.println("Action done");
+            }
+        }
+    }
+
+    class ReceiveThread implements Runnable {
+        private Socket clientSocket;
+        boolean keepRead;
+
+        public ReceiveThread(Socket clientSocket) {
+            this.clientSocket = clientSocket;
+        }
+
+        //receive status
+        public void read() {
+
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            //thread.interrupt();
+
+            String sentence = null;
+            try {
+                sentence = bufferedReader.readLine();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName() + " on read");
+
+            if (sentence == null) {
+
+                try {
+                    clientSocket.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 
 
-        } else {
+            } else {
 
-            System.out.println(sentence);
+                System.out.println(sentence);
+
+            }
+        }
+
+        @Override
+        public void run() {
+            while (!keepRead) {
+                read();
+            }
 
         }
-    }
-
-    @Override
-    public void run() {
-        while (!keepRead) {
-            read();
-        }
-
     }
 }
 
