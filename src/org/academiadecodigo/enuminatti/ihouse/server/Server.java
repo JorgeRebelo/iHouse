@@ -95,15 +95,14 @@ public class Server {
         @Override
         public void run() {
 
-            clientMessage = house.sendUpdate();
-            writer.println(clientMessage);
+            String serverMessage = house.sendUpdate();
+            writer.println(serverMessage);
 
             while (true) {
 
                 try {
                     //read command from client
                     clientMessage = reader.readLine();
-                    clientMessage = house.sendUpdate();
                     if (clientMessage.equals("null")) {
                         System.out.println("Client disconnected");
                         disconnect();
@@ -113,8 +112,10 @@ public class Server {
                     e.printStackTrace();
                 }
 
+                house.receiveUpdate(clientMessage);
                 System.out.println("Server: " + clientMessage);
-                broadcast((clientMessage + "\n").getBytes());
+                serverMessage = house.sendUpdate();
+                broadcast((serverMessage + "\n").getBytes());
                 System.out.println("Sent message from server: " + clientMessage);
 
             }

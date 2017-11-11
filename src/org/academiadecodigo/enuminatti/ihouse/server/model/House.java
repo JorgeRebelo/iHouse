@@ -1,5 +1,6 @@
 package org.academiadecodigo.enuminatti.ihouse.server.model;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +34,21 @@ public class House {
             state += key;
             state += "=";
             state += String.valueOf(lamps.get(key).byteValue());
+            state += "/";
         }
         System.out.println(state);
         return state;
+    }
+
+    public void receiveUpdate(String state) {
+
+        String[] lamp = state.split("/");
+
+        for (int i = 0; i < lamp.length ; i++) {
+
+            String[] status = lamp[i].split("=");
+            lamps.put(status[0], Integer.parseInt(status[1]));
+            System.out.println("House update: " + status[0] + status[1]);
+        }
     }
 }
