@@ -40,8 +40,6 @@ public class Client extends Application {
             executors.submit(receiveThread);
 
 
-            System.out.println(controller);
-
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
         }
@@ -56,10 +54,10 @@ public class Client extends Application {
         //show UI
         Navigation.getInstance().setStage(primaryStage);
         Navigation.getInstance().loadScreen("house");
-        Navigation.getInstance().getController("login");
-        controller = (HouseController) Navigation.getInstance().getController("house");
-        LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
-        loginController.setUserService(userService);
+        HouseController loginController = (HouseController) Navigation.getInstance().getController("house");
+        //loginController.setUserService(userService);
+        controller = loginController;
+        System.out.println(controller);
 
     }
 
@@ -105,11 +103,7 @@ public class Client extends Application {
         public void run() {
             while (true) {
                 write();
-                System.out.println("WTF");
-                System.out.println("CTRL " + controller);
-                System.out.println(controller.getClass().getSimpleName());
                 controller.doAction();
-                System.out.println("Action done");
             }
         }
     }
