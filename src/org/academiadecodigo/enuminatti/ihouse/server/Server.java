@@ -1,13 +1,6 @@
 package org.academiadecodigo.enuminatti.ihouse.server;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import org.academiadecodigo.enuminatti.ihouse.server.controller.Controller;
-import org.academiadecodigo.enuminatti.ihouse.server.controller.HouseController;
+import org.academiadecodigo.enuminatti.ihouse.server.model.House;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -26,6 +19,7 @@ public class Server {
     private ExecutorService threadPool;
     private LinkedList<ServerWorker> workerList;
     private ServerSocket svSocket;
+    private House house;
 
     public static void main(String[] args) {
 
@@ -33,6 +27,7 @@ public class Server {
         Server server = new Server();
         server.threadPool = Executors.newCachedThreadPool();
         server.workerList = new LinkedList<>();
+        server.house = new House();
 
         try {
             server.svSocket = new ServerSocket(8080);
@@ -45,7 +40,6 @@ public class Server {
         server.threadPool.submit(acceptThread);
 
     }
-
 
 
     class AcceptClients implements Runnable {
@@ -84,11 +78,13 @@ public class Server {
         private Socket clientSocket;
         private String clientMessage;
         private BufferedReader reader;
+        private PrintWriter writer;
 
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new PrintWriter(clientSocket.getOutputStream(),true);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,11 +95,15 @@ public class Server {
         @Override
         public void run() {
 
+            clientMessage = house.sendUpdate();
+            writer.println(clientMessage);
+
             while (true) {
 
                 try {
                     //read command from client
                     clientMessage = reader.readLine();
+                    clientMessage = house.sendUpdate();
                     if (clientMessage.equals("null")) {
                         System.out.println("Client disconnected");
                         disconnect();

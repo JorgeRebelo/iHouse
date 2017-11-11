@@ -32,7 +32,7 @@ public class House {
         for (String key : lamps.keySet()) {
             state += key;
             state += "=";
-            state += String.valueOf(lamps.get(key).byteValue()) + "\n";
+            state += String.valueOf(lamps.get(key).byteValue());
         }
         System.out.println(state);
         return state;
