@@ -3,7 +3,6 @@ package org.academiadecodigo.enuminatti.ihouse.client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
-import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.client.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
@@ -60,7 +59,7 @@ public class Client extends Application {
         System.out.println(controller);
         try {
             //Initialize threads, sockets
-            clientSocket = new Socket("localhost", 8080);
+            clientSocket = new Socket("localhost", 8081);
             SendThread sendThread = new SendThread(clientSocket);
             ReceiveThread receiveThread = new ReceiveThread(clientSocket);
             //add threads to threadpool

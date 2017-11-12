@@ -127,7 +127,7 @@ public class HouseController implements Controller {
 
     }
 
-    public void doAction(String status){
+    public void doAction(String status) {
         System.out.println("Cheguei");
         Platform.runLater(new Runnable() {
             @Override
@@ -136,13 +136,25 @@ public class HouseController implements Controller {
                 String[] lamp = status.split("/");
                 System.out.println("Reached recieveUpdate");
 
-                for (int i = 0; i < lamp.length ; i++) {
+                for (int i = 0; i < lamp.length; i++) {
 
                     String[] status = lamp[i].split("=");
 
-                    switch(status[0]){
+                    switch (status[0]) {
                         case "masterBedroomLightButton":
                             masterBedroomLightButton.setText(status[1]);
+                            break;
+                        case "livingroomLightButton":
+                            livingroomLightButton.setText(status[1]);
+                            break;
+                        case "bedroomLightButton":
+                            bedroomLightButton.setText(status[1]);
+                            break;
+                        case "bathroomLightButton":
+                            bathroomLightButton.setText(status[1]);
+                            break;
+                        case "kitchenLightButton":
+                            kitchenLightButton.setText(status[1]);
                             break;
                     }
                 }

@@ -30,7 +30,7 @@ public class Server {
         server.house = new House();
 
         try {
-            server.svSocket = new ServerSocket(8080);
+            server.svSocket = new ServerSocket(8081);
         } catch (IOException e) {
             e.printStackTrace();
         }
