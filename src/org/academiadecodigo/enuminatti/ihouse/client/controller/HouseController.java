@@ -37,13 +37,13 @@ public class HouseController implements Controller {
 
         if (bathroomLightButton.getText().equals("OFF")) {
             bathroomLightButton.setText("ON");
-            bathroomLightButton.getStyleClass().add("ON");
+            bathroomLightButton.setStyle("-fx-background-color: yellow");
             return;
         }
 
         if (bathroomLightButton.getText().equals("ON")) {
             bathroomLightButton.setText("OFF");
-            bathroomLightButton.getStyleClass().add("OFF");
+            bathroomLightButton.setStyle("-fx-background-color: lightgray");
             return;
         }
     }
@@ -53,13 +53,13 @@ public class HouseController implements Controller {
 
         if (bedroomLightButton.getText().equals("OFF")) {
             bedroomLightButton.setText("ON");
-            bedroomLightButton.getStyleClass().add("ON");
+            bedroomLightButton.setStyle("-fx-background-color: yellow");
             return;
         }
 
         if (bedroomLightButton.getText().equals("ON")) {
             bedroomLightButton.setText("OFF");
-            bedroomLightButton.getStyleClass().add("OFF");
+            bedroomLightButton.setStyle("-fx-background-color: lightgray");
             return;
         }
     }
@@ -75,13 +75,13 @@ public class HouseController implements Controller {
 
         if (kitchenLightButton.getText().equals("OFF")) {
             kitchenLightButton.setText("ON");
-            kitchenLightButton.getStyleClass().add("ON");
+            kitchenLightButton.setStyle("-fx-background-color: yellow");
             return;
         }
 
         if (kitchenLightButton.getText().equals("ON")) {
             kitchenLightButton.setText("OFF");
-            kitchenLightButton.getStyleClass().add("OFF");
+            kitchenLightButton.setStyle("-fx-background-color: lightgray");
             return;
         }
 
@@ -92,13 +92,13 @@ public class HouseController implements Controller {
 
         if (livingroomLightButton.getText().equals("OFF")) {
             livingroomLightButton.setText("ON");
-            livingroomLightButton.getStyleClass().add("ON");
+            livingroomLightButton.setStyle("-fx-background-color: yellow");
             return;
         }
 
         if (livingroomLightButton.getText().equals("ON")) {
             livingroomLightButton.setText("OFF");
-            livingroomLightButton.getStyleClass().add("OFF");
+            livingroomLightButton.setStyle("-fx-background-color: lightgray");
             return;
         }
 
@@ -115,13 +115,13 @@ public class HouseController implements Controller {
 
         if (masterBedroomLightButton.getText().equals("OFF")) {
             masterBedroomLightButton.setText("ON");
-            masterBedroomLightButton.getStyleClass().add("ON");
+            masterBedroomLightButton.setStyle("-fx-background-color: yellow");
             return;
         }
 
         if (masterBedroomLightButton.getText().equals("ON")) {
             masterBedroomLightButton.setText("OFF");
-            masterBedroomLightButton.getStyleClass().add("OFF");
+            masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
             return;
         }
 
@@ -142,23 +142,54 @@ public class HouseController implements Controller {
 
                     switch (status[0]) {
                         case "masterBedroomLightButton":
-                            masterBedroomLightButton.setText(status[1]);
+                            if (status[1].equals("1")) {
+                                masterBedroomLightButton.setText("ON");
+                                masterBedroomLightButton.setStyle("-fx-background-color: yellow");
+                            } else {
+                                masterBedroomLightButton.setText("OFF");
+                                masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
+                            }
                             break;
                         case "livingroomLightButton":
-                            livingroomLightButton.setText(status[1]);
+                            if (status[1].equals("1")) {
+                                livingroomLightButton.setText("ON");
+                                livingroomLightButton.setStyle("-fx-background-color: yellow");
+                            } else {
+                                livingroomLightButton.setText("OFF");
+                                livingroomLightButton.setStyle("-fx-background-color: lightgray");
+                            }
                             break;
                         case "bedroomLightButton":
-                            bedroomLightButton.setText(status[1]);
+                            if (status[1].equals("1")) {
+                                bedroomLightButton.setText("ON");
+                                bedroomLightButton.setStyle("-fx-background-color: yellow");
+                            } else {
+                                bedroomLightButton.setText("OFF");
+                                bedroomLightButton.setStyle("-fx-background-color: lightgray");
+                            }
                             break;
                         case "bathroomLightButton":
-                            bathroomLightButton.setText(status[1]);
+                            if (status[1].equals("1")) {
+                                bathroomLightButton.setText("ON");
+                                bathroomLightButton.setStyle("-fx-background-color: yellow");
+                            } else {
+                                bathroomLightButton.setText("OFF");
+                                bathroomLightButton.setStyle("-fx-background-color: lightgray");
+                            }
                             break;
                         case "kitchenLightButton":
-                            kitchenLightButton.setText(status[1]);
+                            if (status[1].equals("1")) {
+                                kitchenLightButton.setText("ON");
+                                kitchenLightButton.setStyle("-fx-background-color: yellow");
+                            } else {
+                                kitchenLightButton.setText("OFF");
+                                kitchenLightButton.setStyle("-fx-background-color: lightgray");
+                            }
                             break;
                     }
                 }
             }
         });
+
     }
 }

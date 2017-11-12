@@ -21,7 +21,7 @@ public class House {
     }
 
     public void putLamps() {
-        lamps.put("masterBedroomLightButton", 7);
+        lamps.put("masterBedroomLightButton", 0);
         lamps.put("bedroomLightButton", 0);
         lamps.put("livingroomLightButton", 0);
         lamps.put("kitchenLightButton", 0);
