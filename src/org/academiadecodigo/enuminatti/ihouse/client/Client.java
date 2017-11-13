@@ -25,23 +25,11 @@ public class Client extends Application {
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
     private HouseController controller;
+    private ReceiveThread receiveThread;
+
 
     @Override
     public void init() {
-
-        /*try {
-            //Initialize threads, sockets
-            clientSocket = new Socket("localhost", 8080);
-            SendThread sendThread = new SendThread(clientSocket);
-            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
-            //add threads to threadpool
-            executors.submit(sendThread);
-            executors.submit(receiveThread);
-
-
-        } catch (Exception e) {
-            System.out.println("Couldn't connect.");
-        }*/
 
         //Initialize service
         userService = new MockUserService();
@@ -50,20 +38,21 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //show UI
+        //Show UI
         Navigation.getInstance().setStage(primaryStage);
         Navigation.getInstance().loadScreen("house");
         HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
         //loginController.setUserService(userService);
+
+        //We need access to the controller from the class, so we store it
         controller = houseController;
-        System.out.println(controller);
+
         try {
             //Initialize threads, sockets
             clientSocket = new Socket("localhost", 8081);
-            SendThread sendThread = new SendThread(clientSocket);
-            ReceiveThread receiveThread = new ReceiveThread(clientSocket);
-            //add threads to threadpool
-            executors.submit(sendThread);
+            receiveThread = new ReceiveThread();
+
+            //Add threads to threadpool
             executors.submit(receiveThread);
 
 
@@ -73,60 +62,34 @@ public class Client extends Application {
 
     }
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) {
         launch(args);
     }
 
-    class SendThread implements Runnable {
+    public void write(String command) {
 
-        private Socket clientSocket;
+        BufferedWriter outToServer;
+        try {
 
-        public SendThread(Socket clientSocket) {
-            this.clientSocket = clientSocket;
+            ///THIS SOCKET IS FUCKIN EMPTY
+            outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            //send command to server
+            outToServer.write(command);
+            System.out.println(Thread.currentThread().getName() + " on write");
+            outToServer.newLine();
+            outToServer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        //write command to server
-        public void write() {
-
-            Scanner scanner = new Scanner(System.in);
-
-            String sentence;
-            //read from command
-            sentence = scanner.nextLine();
-
-            BufferedWriter outToServer;
-            try {
-                outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                //send command to server
-                outToServer.write(sentence);
-                System.out.println(Thread.currentThread().getName() + " on write");
-                outToServer.newLine();
-                outToServer.flush();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("RETURNING FROM WRITE");
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                write();
-            }
-        }
+        System.out.println("RETURNING FROM WRITE");
     }
 
+
+//-------------------- THREAD --------------------//
+
     class ReceiveThread implements Runnable {
-
-        private Socket clientSocket;
-        boolean keepRead;
-
-        public ReceiveThread(Socket clientSocket) {
-            this.clientSocket = clientSocket;
-        }
 
         //receive status
         public void read() {
@@ -169,7 +132,7 @@ public class Client extends Application {
 
         @Override
         public void run() {
-            while (!keepRead) {
+            while (true) {
                 read();
             }
         }

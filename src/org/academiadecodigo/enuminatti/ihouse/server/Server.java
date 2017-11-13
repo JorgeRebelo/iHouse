@@ -23,7 +23,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        //Initialize a server, a thread pool and a worker list
+        //Initialize a server, a thread pool and a worker list. Give him an imaginary house to work with.
         Server server = new Server();
         server.threadPool = Executors.newCachedThreadPool();
         server.workerList = new LinkedList<>();
@@ -46,26 +46,26 @@ public class Server {
 
         ServerSocket svSocket;
 
-        //Constructor
         public AcceptClients(ServerSocket svSocket) {
             this.svSocket = svSocket;
         }
 
-
         @Override
         public void run() {
 
-
             while (true) {
 
-                //Blocking method. Accepting clients
                 try {
+                    //Create a socket, accept that socket, create a new thread and submit the worker to a thread pool
+                    //and a worker list
                     Socket clientSocket;
                     clientSocket = svSocket.accept();
                     System.out.println("Client connected");
+
                     ServerWorker svWorker = new ServerWorker(clientSocket);
                     threadPool.submit(svWorker);
                     workerList.add(svWorker);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -76,10 +76,12 @@ public class Server {
     class ServerWorker implements Runnable {
 
         private Socket clientSocket;
-        private String clientMessage;
+        private String clientCMD;
+        private String houseState;
         private BufferedReader reader;
         private PrintWriter writer;
 
+        //Constructor, recieves the client's socket and instantiates a new reader and writer
         public ServerWorker(Socket socket) {
             this.clientSocket = socket;
             try {
@@ -95,15 +97,16 @@ public class Server {
         @Override
         public void run() {
 
-            String serverMessage = house.sendUpdate();
-            writer.println(serverMessage);
+            //Send the first update of how the server is currently
+            houseState = house.sendUpdate();
+            writer.println(houseState);
 
             while (true) {
 
                 try {
                     //read command from client
-                    clientMessage = reader.readLine();
-                    if (clientMessage.equals("null")) {
+                    clientCMD = reader.readLine();
+                    if (clientCMD.equals("null")) {
                         System.out.println("Client disconnected");
                         disconnect();
                         break;
@@ -112,11 +115,14 @@ public class Server {
                     e.printStackTrace();
                 }
 
-                house.receiveUpdate(clientMessage);
-                System.out.println("Server: " + clientMessage);
-                serverMessage = house.sendUpdate();
-                broadcast((serverMessage + "\n").getBytes());
-                System.out.println("Sent message from server: " + clientMessage);
+                //House receives update from client
+                house.receiveUpdate(clientCMD);
+                System.out.println("Server: " + clientCMD);
+
+                //A new string is attributed to houseState to broadcast it to all clients
+                houseState = house.sendUpdate();
+                broadcast((houseState + "\n").getBytes());
+                System.out.println("Sent message from server: " + clientCMD);
 
             }
         }
@@ -135,11 +141,11 @@ public class Server {
 
     }
 
-    //send commands to all clients/ BROADCAST
     private void broadcast(byte[] message) {
 
         for (int i = 0; i < workerList.size(); i++) {
 
+            //Iterate all workers to write to their sockets
             try {
                 workerList.get(i).clientSocket.getOutputStream().write(message);
                 workerList.get(i).clientSocket.getOutputStream().flush();

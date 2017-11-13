@@ -31,10 +31,7 @@ public class House {
     public String sendUpdate() {
         String state = "";
         for (String key : lamps.keySet()) {
-            state += key;
-            state += "=";
-            state += String.valueOf(lamps.get(key).byteValue());
-            state += "/";
+            state += key + "=" + String.valueOf(lamps.get(key).byteValue());
         }
         System.out.println(state);
         return state;
