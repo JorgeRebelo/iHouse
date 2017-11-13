@@ -121,7 +121,7 @@ public class Server {
 
                 //A new string is attributed to houseState to broadcast it to all clients
                 houseState = house.sendUpdate();
-                broadcast((houseState + "\n").getBytes());
+                broadcast((houseState).getBytes());
                 System.out.println("Sent message from server: " + clientCMD);
 
             }

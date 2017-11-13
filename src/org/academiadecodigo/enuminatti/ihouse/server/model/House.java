@@ -31,9 +31,9 @@ public class House {
     public String sendUpdate() {
         String state = "";
         for (String key : lamps.keySet()) {
-            state += key + "=" + String.valueOf(lamps.get(key).byteValue());
+            state += key + "=" + String.valueOf(lamps.get(key).byteValue()) + "/";
         }
-        System.out.println(state);
+        System.out.println("SENDING METHOD: " + state);
         return state;
     }
 

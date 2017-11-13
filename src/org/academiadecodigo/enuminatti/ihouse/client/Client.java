@@ -46,6 +46,7 @@ public class Client extends Application {
 
         //We need access to the controller from the class, so we store it
         controller = houseController;
+        controller.setClient(this);
 
         try {
             //Initialize threads, sockets
@@ -109,7 +110,7 @@ public class Client extends Application {
                 e1.printStackTrace();
             }
             System.out.println(Thread.currentThread().getName() + " on read");
-
+            System.out.println("Received from server: " + sentence);
             System.out.println("READING NOW");
             controller.doAction(sentence);
 
@@ -121,12 +122,6 @@ public class Client extends Application {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
-
-            } else {
-
-                System.out.println(sentence);
-
             }
         }
 

@@ -19,6 +19,10 @@ public class HouseController implements Controller {
     List<Button> lights;
     Client client;
 
+    /*public HouseController (Client client) {
+        this.client = client;
+    }*/
+
     @FXML
     void initialize() {
         assert masterBedroomLightButton != null : "fx:id=\"masterBedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
@@ -70,12 +74,7 @@ public class HouseController implements Controller {
             bathroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
     }
 
     @FXML
@@ -90,12 +89,8 @@ public class HouseController implements Controller {
             bedroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
+
     }
 
 
@@ -111,12 +106,7 @@ public class HouseController implements Controller {
             kitchenLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
     }
 
 
@@ -151,12 +141,9 @@ public class HouseController implements Controller {
             masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+
+        client.write(getHouseStatus());
+
     }
 
     @FXML
@@ -179,12 +166,14 @@ public class HouseController implements Controller {
             @Override
             public void run() {
 
+                System.out.println("received status 1 : " + status);
                 String[] lamp = status.split("/");
                 System.out.println("Received status: " + status);
 
                 for (int i = 0; i < lamp.length; i++) {
 
                     String[] status = lamp[i].split("=");
+                    System.out.println("Lamp :  " + status[0] + status[2] + " ");
 
                     switch (status[0]) {
                         case "masterBedroomLightButton":
@@ -239,9 +228,9 @@ public class HouseController implements Controller {
 
     }
 
-    public String getHouseStatus(){
+    private String getHouseStatus(){
 
-        houseStatus = null;
+        houseStatus = "";
 
         for (int button = 0; button < lights.size(); button++) {
             String lightStatus = null;
@@ -257,5 +246,9 @@ public class HouseController implements Controller {
 
         System.out.println("Click message: " + houseStatus);
         return houseStatus;
+    }
+
+    public void setClient(Client client){
+        this.client = client;
     }
 }
