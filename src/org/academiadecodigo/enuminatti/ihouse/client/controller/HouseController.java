@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class HouseController implements Controller {
 
-    String houseStatus;
-    List<Button> lights;
-    Client client;
+    private String houseStatus;
+    private List<Button> lights;
+    private Client client;
 
     /*public HouseController (Client client) {
         this.client = client;
@@ -74,7 +74,12 @@ public class HouseController implements Controller {
             bathroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        client.write(getHouseStatus());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.write(getHouseStatus());
+            }
+        });
     }
 
     @FXML
@@ -89,7 +94,12 @@ public class HouseController implements Controller {
             bedroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        client.write(getHouseStatus());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.write(getHouseStatus());
+            }
+        });
 
     }
 
@@ -106,7 +116,12 @@ public class HouseController implements Controller {
             kitchenLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        client.write(getHouseStatus());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.write(getHouseStatus());
+            }
+        });
     }
 
 
@@ -142,7 +157,12 @@ public class HouseController implements Controller {
         }
 
 
-        client.write(getHouseStatus());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.write(getHouseStatus());
+            }
+        });
 
     }
 
@@ -173,7 +193,7 @@ public class HouseController implements Controller {
                 for (int i = 0; i < lamp.length; i++) {
 
                     String[] status = lamp[i].split("=");
-                    System.out.println("Lamp :  " + status[0] + status[2] + " ");
+                    System.out.println("Lamp :  " + status[0] + status[1] + " ");
 
                     switch (status[0]) {
                         case "masterBedroomLightButton":

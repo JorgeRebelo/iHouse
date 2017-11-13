@@ -33,7 +33,6 @@ public class House {
         for (String key : lamps.keySet()) {
             state += key + "=" + String.valueOf(lamps.get(key).byteValue()) + "/";
         }
-        System.out.println("SENDING METHOD: " + state);
         return state;
     }
 

@@ -106,7 +106,7 @@ public class Server {
                 try {
                     //read command from client
                     clientCMD = reader.readLine();
-                    if (clientCMD.equals("null")) {
+                    if (clientCMD == null) {
                         System.out.println("Client disconnected");
                         disconnect();
                         break;

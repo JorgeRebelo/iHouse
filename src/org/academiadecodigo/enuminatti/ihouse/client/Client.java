@@ -38,6 +38,7 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         //Show UI
         Navigation.getInstance().setStage(primaryStage);
         Navigation.getInstance().loadScreen("house");
@@ -95,9 +96,11 @@ public class Client extends Application {
         //receive status
         public void read() {
 
+            System.out.println("--TRY READ--");
             BufferedReader bufferedReader = null;
             try {
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                System.out.println("Buffered reader created. Socket");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -105,6 +108,9 @@ public class Client extends Application {
             String sentence = null;
             try {
                 sentence = bufferedReader.readLine();
+
+                System.out.println("unblocked");
+                System.out.println("sentence read: " + sentence);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
