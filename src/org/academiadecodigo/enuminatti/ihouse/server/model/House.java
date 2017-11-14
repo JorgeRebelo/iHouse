@@ -11,6 +11,8 @@ public class House {
 
     private Map<String, Integer> lamps;
 
+    private ReadWrite readWrite = new ReadWrite();
+
     public House() {
         this.lamps = new HashMap<>();
         putLamps();
@@ -33,6 +35,8 @@ public class House {
         for (String key : lamps.keySet()) {
             state += key + "=" + String.valueOf(lamps.get(key).byteValue()) + "/";
         }
+
+        readWrite.write(state, "resources/saveFile");
         return state;
     }
 
