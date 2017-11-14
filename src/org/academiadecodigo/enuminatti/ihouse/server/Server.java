@@ -60,7 +60,7 @@ public class Server {
                     //and a worker list
                     Socket clientSocket;
                     clientSocket = svSocket.accept();
-                    System.out.println("Client connected");
+                    System.out.println(">Client connected");
 
                     ServerWorker svWorker = new ServerWorker(clientSocket);
                     threadPool.submit(svWorker);
@@ -71,6 +71,15 @@ public class Server {
                 }
             }
         }
+    }
+
+    private void broadcast(String message) {
+
+        //Iterate all workers to write to their sockets
+        for (ServerWorker svWorker : workerList) {
+            svWorker.write(message);
+        }
+
     }
 
     class ServerWorker implements Runnable {
@@ -86,7 +95,7 @@ public class Server {
             this.clientSocket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                writer = new PrintWriter(clientSocket.getOutputStream(),true);
+                writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,6 +109,8 @@ public class Server {
             //Send the first update of how the server is currently
             houseState = house.sendUpdate();
             writer.println(houseState);
+            System.out.println(">First update sent");
+
 
             while (true) {
 
@@ -107,24 +118,29 @@ public class Server {
                     //read command from client
                     clientCMD = reader.readLine();
                     if (clientCMD == null) {
-                        System.out.println("Client disconnected");
+                        System.out.println(">Client disconnected");
                         disconnect();
                         break;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                System.out.println("\n" + "------------NEW UPDATE-----------");
 
-                //House receives update from client
+                //House receives update from client and updates itself
                 house.receiveUpdate(clientCMD);
-                System.out.println("Server: " + clientCMD);
+                System.out.println("Server command: " + clientCMD);
 
                 //A new string is attributed to houseState to broadcast it to all clients
                 houseState = house.sendUpdate();
-                broadcast((houseState).getBytes());
-                System.out.println("Sent message from server: " + clientCMD);
+                broadcast(houseState);
+                System.out.println("Command broadcast to all clients");
 
             }
+        }
+
+        public void write(String content) {
+            writer.println(content);
         }
 
         //Close socket/buffer
@@ -138,22 +154,9 @@ public class Server {
             }
         }
 
-
     }
 
-    private void broadcast(byte[] message) {
 
-        for (int i = 0; i < workerList.size(); i++) {
-
-            //Iterate all workers to write to their sockets
-            try {
-                workerList.get(i).clientSocket.getOutputStream().write(message);
-                workerList.get(i).clientSocket.getOutputStream().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
 
 

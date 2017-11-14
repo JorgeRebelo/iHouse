@@ -74,12 +74,8 @@ public class HouseController implements Controller {
             bathroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
+
     }
 
     @FXML
@@ -94,12 +90,7 @@ public class HouseController implements Controller {
             bedroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
 
     }
 
@@ -116,12 +107,8 @@ public class HouseController implements Controller {
             kitchenLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
+
     }
 
 
@@ -137,12 +124,8 @@ public class HouseController implements Controller {
             livingroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
+
     }
 
     @FXML
@@ -156,13 +139,7 @@ public class HouseController implements Controller {
             masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
         }
 
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                client.write(getHouseStatus());
-            }
-        });
+        client.write(getHouseStatus());
 
     }
 
@@ -182,13 +159,15 @@ public class HouseController implements Controller {
 
     public void doAction(String status) {
 
+        System.out.println("do action called");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
-                System.out.println("received status 1 : " + status);
+                System.out.println("Platform Runlater: " + Thread.currentThread().getName());
+
                 String[] lamp = status.split("/");
-                System.out.println("Received status: " + status);
+                System.out.println("doAction() executing command: " + status);
 
                 for (int i = 0; i < lamp.length; i++) {
 

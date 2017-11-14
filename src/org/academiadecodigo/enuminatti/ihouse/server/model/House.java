@@ -39,13 +39,15 @@ public class House {
     public void receiveUpdate(String state) {
 
         String[] lamp = state.split("/");
-        System.out.println("Reached recieveUpdate");
+        System.out.println("Updating the house...");
 
         for (int i = 0; i < lamp.length ; i++) {
 
             String[] status = lamp[i].split("=");
             lamps.put(status[0], Integer.parseInt(status[1]));
-            System.out.println("House update: " + status[0] + status[1]);
+            System.out.println("House update> " + status[0] + status[1]);
         }
+
+        System.out.println("Updated!");
     }
 }

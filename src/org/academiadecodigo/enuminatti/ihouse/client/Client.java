@@ -70,70 +70,80 @@ public class Client extends Application {
 
     public void write(String command) {
 
+        System.out.println("--WRITE BLOCK--");
         BufferedWriter outToServer;
         try {
 
             ///THIS SOCKET IS FUCKIN EMPTY
             outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            System.out.println("Buffered Writer created.");
+
             //send command to server
             outToServer.write(command);
-            System.out.println(Thread.currentThread().getName() + " on write");
+            System.out.println(Thread.currentThread().getName() + " on write()");
             outToServer.newLine();
             outToServer.flush();
+
+            System.out.println("Data flushed to server");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("RETURNING FROM WRITE");
+        System.out.println("--WRITE BLOCK END--");
     }
 
 
 //-------------------- THREAD --------------------//
 
     class ReceiveThread implements Runnable {
+        BufferedReader bufferedReader = null;
+
+
+        public ReceiveThread() {
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //receive status
         public void read() {
 
-            System.out.println("--TRY READ--");
-            BufferedReader bufferedReader = null;
-            try {
-                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                System.out.println("Buffered reader created. Socket");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            System.out.println("--READ BLOCK--" + Thread.currentThread().getName());
 
-            String sentence = null;
             try {
+
+                String sentence = null;
                 sentence = bufferedReader.readLine();
 
-                System.out.println("unblocked");
-                System.out.println("sentence read: " + sentence);
+                if (sentence == null) {
+                    clientSocket.close();
+                }
+
+                System.out.println("Unblocked from readLine()");
+                System.out.println("Command read: " + sentence);
+
+
+                System.out.println(Thread.currentThread().getName() + " on read()");
+                controller.doAction(sentence);
+                System.out.println("Client House Updated!");
+
 
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            System.out.println(Thread.currentThread().getName() + " on read");
-            System.out.println("Received from server: " + sentence);
-            System.out.println("READING NOW");
-            controller.doAction(sentence);
 
-
-            if (sentence == null) {
-
-                try {
-                    clientSocket.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            System.out.println("--READ BLOCK END--");
         }
 
         @Override
         public void run() {
+            System.out.println("invoking the run " + Thread.currentThread().getName());
             while (true) {
+                System.out.println("in the while");
                 read();
             }
         }
