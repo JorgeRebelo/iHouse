@@ -22,7 +22,7 @@ public class Server {
     private LinkedList<ServerWorker> workerList;
     private ServerSocket svSocket;
     private House house;
-    private ReadWrite readWrite = new ReadWrite();
+    private ReadWrite readWrite;
 
     public static void main(String[] args) {
 
@@ -31,6 +31,7 @@ public class Server {
         server.threadPool = Executors.newCachedThreadPool();
         server.workerList = new LinkedList<>();
         server.house = new House();
+        server.readWrite = new ReadWrite();
 
         try {
             server.svSocket = new ServerSocket(8081);

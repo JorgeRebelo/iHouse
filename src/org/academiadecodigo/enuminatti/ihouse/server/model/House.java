@@ -11,10 +11,11 @@ public class House {
 
     private Map<String, Integer> lamps;
 
-    private ReadWrite readWrite = new ReadWrite();
+    private ReadWrite readWrite;
 
     public House() {
         this.lamps = new HashMap<>();
+        this.readWrite = new ReadWrite();
         putLamps();
     }
 
@@ -36,12 +37,13 @@ public class House {
             state += key + "=" + String.valueOf(lamps.get(key).byteValue()) + "/";
         }
 
+        readWrite.write(state, "resources/saveFile");
+
         return state;
     }
 
     public void receiveUpdate(String state) {
 
-        //state = readWrite.read("resources/saveFile");
         String[] lamp = state.split("/");
         System.out.println("Updating the house...");
 

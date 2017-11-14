@@ -134,7 +134,7 @@ public class Client extends Application {
                 e1.printStackTrace();
             }
 
-            System.out.println("--READ BLOCK END--");
+            System.out.println("----------" + "\n");
         }
 
         @Override
