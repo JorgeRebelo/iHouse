@@ -19,9 +19,91 @@ public class HouseController implements Controller {
     private List<Button> lights;
     private Client client;
 
-    /*public HouseController (Client client) {
-        this.client = client;
-    }*/
+
+    @FXML
+    private Button masterBedroomLightButton;
+
+    @FXML
+    private Button bedroomLightButton;
+
+    @FXML
+    private Button livingroomLightButton;
+
+    @FXML
+    private Button kitchenLightButton;
+
+    @FXML
+    private Button bathroomLightButton;
+
+    @FXML
+    private Button exitButton;
+
+    @FXML
+    private Button logOutButton;
+
+
+    //----------BUTTON METHODS----------//
+
+    @FXML
+    void onBathroomLightButton(ActionEvent event) {
+
+        updateLights(bathroomLightButton, bathroomLightButton.getText());
+
+        client.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onBedroomLightButton(ActionEvent event) {
+
+        updateLights(bedroomLightButton, bedroomLightButton.getText());
+
+        client.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onKitchenLightButton(ActionEvent event) {
+
+        updateLights(kitchenLightButton, kitchenLightButton.getText());
+
+        client.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onLivingroomLightButton(ActionEvent event) {
+
+        updateLights(livingroomLightButton, livingroomLightButton.getText());
+
+        client.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onMasterBedroomLightButton(ActionEvent event) {
+
+        updateLights(masterBedroomLightButton, masterBedroomLightButton.getText());
+
+        client.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onLogoutButton(ActionEvent event) {
+
+        Navigation.getInstance().back();
+    }
+
+    @FXML
+    void onExitButton(ActionEvent event) {
+        //Close all communications opened*******************************************************************************
+        Platform.exit();
+    }
+
+
+
+    //---------CONTROLLER METHODS----------//
 
     @FXML
     void initialize() {
@@ -42,183 +124,40 @@ public class HouseController implements Controller {
 
     }
 
-    @FXML // fx:id="masterBedroomLightButton"
-    private Button masterBedroomLightButton; // Value injected by FXMLLoader
+    //Get command from server
+    public void getCommand(String serverCommand) {
 
-    @FXML // fx:id="bedroomLightButton"
-    private Button bedroomLightButton; // Value injected by FXMLLoader
-
-    @FXML // fx:id="livingroomLightButton"
-    private Button livingroomLightButton; // Value injected by FXMLLoader
-
-    @FXML // fx:id="kitchenLightButton"
-    private Button kitchenLightButton; // Value injected by FXMLLoader
-
-    @FXML // fx:id="bathroomLightButton"
-    private Button bathroomLightButton; // Value injected by FXMLLoader
-
-    @FXML // fx:id="exitButton"
-    private Button exitButton; // Value injected by FXMLLoader
-
-    @FXML // fx:id="logOutButton"
-    private Button logOutButton; // Value injected by FXMLLoader
-
-    @FXML
-    void onBathroomLightButton(ActionEvent event) {
-
-        if (bathroomLightButton.getText().equals("OFF")) {
-            bathroomLightButton.setText("ON");
-            bathroomLightButton.setStyle("-fx-background-color: yellow");
-        } else {
-            bathroomLightButton.setText("OFF");
-            bathroomLightButton.setStyle("-fx-background-color: lightgray");
-        }
-
-        client.write(getHouseStatus());
-
-    }
-
-    @FXML
-    void onBedroomLightButton(ActionEvent event) {
-
-        if (bedroomLightButton.getText().equals("OFF")) {
-            bedroomLightButton.setText("ON");
-            bedroomLightButton.setStyle("-fx-background-color: yellow");
-
-        } else {
-            bedroomLightButton.setText("OFF");
-            bedroomLightButton.setStyle("-fx-background-color: lightgray");
-        }
-
-        client.write(getHouseStatus());
-
-    }
-
-
-    @FXML
-    void onKitchenLightButton(ActionEvent event) {
-
-        if (kitchenLightButton.getText().equals("OFF")) {
-            kitchenLightButton.setText("ON");
-            kitchenLightButton.setStyle("-fx-background-color: yellow");
-
-        } else {
-            kitchenLightButton.setText("OFF");
-            kitchenLightButton.setStyle("-fx-background-color: lightgray");
-        }
-
-        client.write(getHouseStatus());
-
-    }
-
-
-    @FXML
-    void onLivingroomLightButton(ActionEvent event) {
-
-        if (livingroomLightButton.getText().equals("OFF")) {
-            livingroomLightButton.setText("ON");
-            livingroomLightButton.setStyle("-fx-background-color: yellow");
-
-        } else {
-            livingroomLightButton.setText("OFF");
-            livingroomLightButton.setStyle("-fx-background-color: lightgray");
-        }
-
-        client.write(getHouseStatus());
-
-    }
-
-    @FXML
-    void onMasterBedroomLightButton(ActionEvent event) {
-
-        if (masterBedroomLightButton.getText().equals("OFF")) {
-            masterBedroomLightButton.setText("ON");
-            masterBedroomLightButton.setStyle("-fx-background-color: yellow");
-        } else {
-            masterBedroomLightButton.setText("OFF");
-            masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
-        }
-
-        client.write(getHouseStatus());
-
-    }
-
-    @FXML
-    void onLogoutButton(ActionEvent event) {
-
-        Navigation.getInstance().back();
-    }
-
-    @FXML
-    void onExitButton(ActionEvent event) {
-        //Close all communications opened*******************************************************************************
-        Platform.exit();
-    }
-
-
-
-    public void doAction(String status) {
-
-        System.out.println("do action called");
+        System.out.println("getCommand() called");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
                 System.out.println("Platform Runlater: " + Thread.currentThread().getName());
 
-                String[] lamp = status.split("/");
-                System.out.println("doAction() executing command: " + status);
+                String[] lamp = serverCommand.split("/");
+                System.out.println("getCommand() executing command: " + serverCommand);
 
                 for (int i = 0; i < lamp.length; i++) {
 
                     String[] status = lamp[i].split("=");
                     System.out.println("Lamp :  " + status[0] + status[1] + " ");
 
+                    //this is not good yet..
                     switch (status[0]) {
                         case "masterBedroomLightButton":
-                            if (status[1].equals("1")) {
-                                masterBedroomLightButton.setText("ON");
-                                masterBedroomLightButton.setStyle("-fx-background-color: yellow");
-                            } else {
-                                masterBedroomLightButton.setText("OFF");
-                                masterBedroomLightButton.setStyle("-fx-background-color: lightgray");
-                            }
+                            updateLights(masterBedroomLightButton, status[1]);
                             break;
                         case "livingroomLightButton":
-                            if (status[1].equals("1")) {
-                                livingroomLightButton.setText("ON");
-                                livingroomLightButton.setStyle("-fx-background-color: yellow");
-                            } else {
-                                livingroomLightButton.setText("OFF");
-                                livingroomLightButton.setStyle("-fx-background-color: lightgray");
-                            }
+                            updateLights(livingroomLightButton, status[1]);
                             break;
                         case "bedroomLightButton":
-                            if (status[1].equals("1")) {
-                                bedroomLightButton.setText("ON");
-                                bedroomLightButton.setStyle("-fx-background-color: yellow");
-                            } else {
-                                bedroomLightButton.setText("OFF");
-                                bedroomLightButton.setStyle("-fx-background-color: lightgray");
-                            }
+                            updateLights(bedroomLightButton, status[1]);
                             break;
                         case "bathroomLightButton":
-                            if (status[1].equals("1")) {
-                                bathroomLightButton.setText("ON");
-                                bathroomLightButton.setStyle("-fx-background-color: yellow");
-                            } else {
-                                bathroomLightButton.setText("OFF");
-                                bathroomLightButton.setStyle("-fx-background-color: lightgray");
-                            }
+                            updateLights(bathroomLightButton, status[1]);
                             break;
                         case "kitchenLightButton":
-                            if (status[1].equals("1")) {
-                                kitchenLightButton.setText("ON");
-                                kitchenLightButton.setStyle("-fx-background-color: yellow");
-                            } else {
-                                kitchenLightButton.setText("OFF");
-                                kitchenLightButton.setStyle("-fx-background-color: lightgray");
-                            }
+                            updateLights(kitchenLightButton, status[1]);
                             break;
                     }
                 }
@@ -227,6 +166,18 @@ public class HouseController implements Controller {
 
     }
 
+    //Update the lights
+    private void updateLights(Button button, String status) {
+        if(status.equals("1") || status.equals("OFF")) {
+            button.setText("ON");
+            button.setStyle("-fx-background-color: yellow");
+            return;
+        }
+        button.setText("OFF");
+        button.setStyle("-fx-background-color: lightgray");
+    }
+
+    //Get message to send to server
     private String getHouseStatus(){
 
         houseStatus = "";

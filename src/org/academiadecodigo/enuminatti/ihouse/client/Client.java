@@ -11,7 +11,6 @@ import org.academiadecodigo.enuminatti.ihouse.client.utils.Security;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -123,12 +122,11 @@ public class Client extends Application {
                     clientSocket.close();
                 }
 
-                System.out.println("Unblocked from readLine()");
                 System.out.println("Command read: " + sentence);
 
 
                 System.out.println(Thread.currentThread().getName() + " on read()");
-                controller.doAction(sentence);
+                controller.getCommand(sentence);
                 System.out.println("Client House Updated!");
 
 
