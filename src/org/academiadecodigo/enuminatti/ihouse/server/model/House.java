@@ -36,12 +36,12 @@ public class House {
             state += key + "=" + String.valueOf(lamps.get(key).byteValue()) + "/";
         }
 
-        readWrite.write(state, "resources/saveFile");
         return state;
     }
 
     public void receiveUpdate(String state) {
 
+        //state = readWrite.read("resources/saveFile");
         String[] lamp = state.split("/");
         System.out.println("Updating the house...");
 

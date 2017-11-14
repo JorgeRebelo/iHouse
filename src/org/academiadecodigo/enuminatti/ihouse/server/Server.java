@@ -1,6 +1,7 @@
 package org.academiadecodigo.enuminatti.ihouse.server;
 
 import org.academiadecodigo.enuminatti.ihouse.server.model.House;
+import org.academiadecodigo.enuminatti.ihouse.server.model.ReadWrite;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -21,6 +22,7 @@ public class Server {
     private LinkedList<ServerWorker> workerList;
     private ServerSocket svSocket;
     private House house;
+    private ReadWrite readWrite = new ReadWrite();
 
     public static void main(String[] args) {
 
@@ -108,7 +110,7 @@ public class Server {
         public void run() {
 
             //Send the first update of how the server is currently
-            houseState = house.sendUpdate();
+            houseState = readWrite.read("resources/saveFile");
             writer.println(houseState);
             System.out.println(">First update sent");
 
