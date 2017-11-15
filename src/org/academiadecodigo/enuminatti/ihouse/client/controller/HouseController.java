@@ -48,7 +48,7 @@ public class HouseController implements Controller {
     void onBathroomLightButton(ActionEvent event) {
 
         updateLights(bathroomLightButton, bathroomLightButton.getText());
-
+        //bathroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -57,7 +57,7 @@ public class HouseController implements Controller {
     void onBedroomLightButton(ActionEvent event) {
 
         updateLights(bedroomLightButton, bedroomLightButton.getText());
-
+        //bedroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -66,7 +66,7 @@ public class HouseController implements Controller {
     void onKitchenLightButton(ActionEvent event) {
 
         updateLights(kitchenLightButton, kitchenLightButton.getText());
-
+        //kitchenLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -75,7 +75,7 @@ public class HouseController implements Controller {
     void onLivingroomLightButton(ActionEvent event) {
 
         updateLights(livingroomLightButton, livingroomLightButton.getText());
-
+        //livingroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -84,7 +84,7 @@ public class HouseController implements Controller {
     void onMasterBedroomLightButton(ActionEvent event) {
 
         updateLights(masterBedroomLightButton, masterBedroomLightButton.getText());
-
+        //masterBedroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -107,6 +107,7 @@ public class HouseController implements Controller {
 
     @FXML
     void initialize() {
+
         assert masterBedroomLightButton != null : "fx:id=\"masterBedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
         assert bedroomLightButton != null : "fx:id=\"bedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
         assert livingroomLightButton != null : "fx:id=\"livingroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
@@ -121,6 +122,11 @@ public class HouseController implements Controller {
         lights.add(livingroomLightButton);
         lights.add(kitchenLightButton);
         lights.add(bathroomLightButton);
+
+
+
+
+
 
     }
 
@@ -168,13 +174,17 @@ public class HouseController implements Controller {
 
     //Update the lights
     private void updateLights(Button button, String status) {
+
         if(status.equals("1") || status.equals("OFF")) {
             button.setText("ON");
+
             button.setStyle("-fx-background-color: yellow");
+           //button.setStyle("-fx-background-radius: 10em");
             return;
         }
         button.setText("OFF");
         button.setStyle("-fx-background-color: lightgray");
+
     }
 
     //Get message to send to server

@@ -1,11 +1,14 @@
-.root{
-    -fx-background-color: black;
+.root {
+    -fx-background-color: lightslategray;
 
-}.ON{
-    -fx-background-color: yellow;
 }
-
-.OFF{
-    -fx-background-color: azure;
+#bathroomLightButton, #bedroomLightButton, #kitchenLightButton, #livingroomLightButton, #masterBedroomLightButton {
+    -fx-background-radius: 5em;
+    -fx-min-width: 45px;
+    -fx-min-height: 45px;
+    -fx-max-width: 45px;
+    -fx-max-height: 45px;
 }
-
+.button{
+    -fx-font-weight: bold;
+}
