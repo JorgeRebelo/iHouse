@@ -97,6 +97,7 @@ public class HouseController implements Controller {
 
     @FXML
     void onExitButton(ActionEvent event) {
+        client.disconnect();
         //Close all communications opened*******************************************************************************
         Platform.exit();
     }

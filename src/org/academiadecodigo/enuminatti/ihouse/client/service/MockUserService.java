@@ -1,7 +1,7 @@
 package org.academiadecodigo.enuminatti.ihouse.client.service;
 
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Security;
-import org.academiadecodigo.enuminatti.ihouse.client.model.User;
+import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,7 +3,7 @@ package org.academiadecodigo.enuminatti.ihouse.client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
-import org.academiadecodigo.enuminatti.ihouse.client.model.User;
+import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
@@ -26,6 +26,12 @@ public class Client extends Application {
     private HouseController controller;
     private ReceiveThread receiveThread;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    //----------------JAVA FX-----------------//
+
 
     @Override
     public void init() {
@@ -44,7 +50,7 @@ public class Client extends Application {
         HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
         //loginController.setUserService(userService);
 
-        //We need access to the controller from the class, so we store it
+        //We need access to the controller from the client, so we store it
         controller = houseController;
         controller.setClient(this);
 
@@ -63,17 +69,15 @@ public class Client extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
+    //------------- WRITE TO SERVER ---------------//
 
     public void write(String command) {
 
-        System.out.println("--WRITE BLOCK--");
+        System.out.println("-------WRITE BLOCK-------");
         BufferedWriter outToServer;
         try {
 
-            ///THIS SOCKET IS FUCKIN EMPTY
             outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             System.out.println("Buffered Writer created.");
 
@@ -89,8 +93,9 @@ public class Client extends Application {
             e.printStackTrace();
         }
 
-        System.out.println("--WRITE BLOCK END--");
+        System.out.println("-----------------------");
     }
+
 
 
 //-------------------- THREAD --------------------//
@@ -111,7 +116,25 @@ public class Client extends Application {
         //receive status
         public void read() {
 
-            System.out.println("--READ BLOCK--" + Thread.currentThread().getName());
+            /**
+             *              TO-DO:  - Client changing login view with the authentication condition
+             *                      - Client User class(optional)
+             *
+             *
+             *              When the client reads the first sentence, it must
+             *              equal true, and that is the condition for the loop to happen.
+             *
+             *              When this triggers, the view will be altered to the house one.
+
+             *
+             *
+             *              Side note: I'm not sure if our client also needs a user in its model,
+             *              since the actions will always start from the client itself
+
+             *
+             */
+
+            System.out.println("------READ BLOCK------" + Thread.currentThread().getName());
 
             try {
 
@@ -119,6 +142,7 @@ public class Client extends Application {
                 sentence = bufferedReader.readLine();
 
                 if (sentence == null) {
+                    bufferedReader.close();
                     clientSocket.close();
                 }
 
@@ -134,16 +158,23 @@ public class Client extends Application {
                 e1.printStackTrace();
             }
 
-            System.out.println("----------" + "\n");
+            System.out.println("--------------------" + "\n");
         }
 
         @Override
         public void run() {
-            System.out.println("invoking the run " + Thread.currentThread().getName());
+            System.out.println("Invoking the run: " + Thread.currentThread().getName());
             while (true) {
-                System.out.println("in the while");
                 read();
             }
+        }
+    }
+
+    public void disconnect(){
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -36,36 +36,6 @@ public class HouseController implements Controller {
     @FXML
     private Label cenasLabel;
 
-    @FXML
-    void onBathroomLightButton(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onBedroomLightButton(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onExitButton(ActionEvent event) {
-        //Close all communications opened*******************************************************************************
-        Platform.exit();
-    }
-
-    @FXML
-    void onKitchenLightButton(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onLivingroomLightButton(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onMasterBedroomLightButton(ActionEvent event) {
-
-    }
 
     public void changeButtonText(){
         masterBedroomLightButton.setText("cona");

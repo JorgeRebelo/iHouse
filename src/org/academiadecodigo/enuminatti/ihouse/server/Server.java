@@ -2,6 +2,7 @@ package org.academiadecodigo.enuminatti.ihouse.server;
 
 import org.academiadecodigo.enuminatti.ihouse.server.model.House;
 import org.academiadecodigo.enuminatti.ihouse.server.model.ReadWrite;
+import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -88,6 +89,7 @@ public class Server {
 
     class ServerWorker implements Runnable {
 
+        private User user;
         private Socket clientSocket;
         private String clientCMD;
         private String houseState;
@@ -109,6 +111,31 @@ public class Server {
 
         @Override
         public void run() {
+
+            /**
+             *
+             *             TO-DO:   - Server database (file)
+             *                      - User class setters
+             *                      - Iterator for searching in user database
+             *
+             *
+             *             We will read the next(basically first) line and associate
+             *             the message to the user name and password of this socket.
+             *
+             *             After that, the server enters a loop where it won't let you
+             *             do actions(go on to the next infinite loop) until you enter
+             *             a valid login (from the server database).
+             *             *hint: if(file).contains*
+             *
+             *             When we finally leave the loop (and the house view from the client
+             *             is already loaded), this server worker starts reading a different
+             *             type of string, which we already did down below.
+             *
+             */
+
+
+
+
 
             //Send the first update of how the server is currently
             houseState = readWrite.read("resources/saveFile");
@@ -153,6 +180,7 @@ public class Server {
             try {
                 reader.close();
                 clientSocket.close();
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
