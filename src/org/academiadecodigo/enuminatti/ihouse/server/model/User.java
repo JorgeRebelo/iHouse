@@ -1,4 +1,4 @@
-package org.academiadecodigo.enuminatti.ihouse.client.model;
+package org.academiadecodigo.enuminatti.ihouse.server.model;
 
 public class User {
 

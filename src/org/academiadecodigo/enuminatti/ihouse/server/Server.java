@@ -2,6 +2,7 @@ package org.academiadecodigo.enuminatti.ihouse.server;
 
 import org.academiadecodigo.enuminatti.ihouse.server.model.House;
 import org.academiadecodigo.enuminatti.ihouse.server.model.ReadWrite;
+import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -28,13 +29,12 @@ public class Server {
 
         //Initialize a server, a thread pool and a worker list. Give him an imaginary house to work with.
         Server server = new Server();
-        server.threadPool = Executors.newCachedThreadPool();
-        server.workerList = new LinkedList<>();
-        server.house = new House();
-        server.readWrite = new ReadWrite();
-
         try {
             server.svSocket = new ServerSocket(8081);
+            server.threadPool = Executors.newCachedThreadPool();
+            server.workerList = new LinkedList<>();
+            server.house = new House();
+            server.readWrite = new ReadWrite();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,6 +42,7 @@ public class Server {
         //Create a new thread accepting clients
         AcceptClients acceptThread = server.new AcceptClients(server.svSocket);
         server.threadPool.submit(acceptThread);
+
 
     }
 
@@ -64,7 +65,7 @@ public class Server {
                     //and a worker list
                     Socket clientSocket;
                     clientSocket = svSocket.accept();
-                    System.out.println(">Client connected");
+                    System.out.println("\n" + "--------------------" + "\n" + ">Client connected");
 
                     ServerWorker svWorker = new ServerWorker(clientSocket);
                     threadPool.submit(svWorker);
@@ -88,6 +89,7 @@ public class Server {
 
     class ServerWorker implements Runnable {
 
+        private User user;
         private Socket clientSocket;
         private String clientCMD;
         private String houseState;
@@ -110,10 +112,37 @@ public class Server {
         @Override
         public void run() {
 
+
+
+            /**
+             *
+             *             TO-DO:   - Server database (file)
+             *                      - User class setters
+             *                      - Iterator for searching in user database
+             *
+             *
+             *             We will read the next(basically first) line and associate
+             *             the message to the user name and password of this socket.
+             *
+             *             After that, the server enters a loop where it won't let you
+             *             do actions(go on to the next infinite loop) until you enter
+             *             a valid login (from the server database).
+             *             *hint: if(file).contains*
+             *
+             *             When we finally leave the loop (and the house view from the client
+             *             is already loaded), this server worker starts reading a different
+             *             type of string, which we already did down below.
+             *
+             */
+
+
+
+
+
             //Send the first update of how the server is currently
             houseState = readWrite.read("resources/saveFile");
             writer.println(houseState);
-            System.out.println(">First update sent");
+            System.out.println(">First update sent" + "\n" + "--------------------");
 
 
             while (true) {
@@ -122,7 +151,7 @@ public class Server {
                     //read command from client
                     clientCMD = reader.readLine();
                     if (clientCMD == null) {
-                        System.out.println(">Client disconnected");
+                        System.out.println("\n" + ">Client disconnected" + "\n" + "------------------");
                         disconnect();
                         break;
                     }
@@ -153,6 +182,7 @@ public class Server {
             try {
                 reader.close();
                 clientSocket.close();
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
