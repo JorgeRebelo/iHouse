@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import org.academiadecodigo.enuminatti.ihouse.client.Client;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
@@ -18,6 +19,7 @@ public class HouseController implements Controller {
     private String houseStatus;
     private List<Button> lights;
     private Client client;
+
 
 
     @FXML
@@ -41,8 +43,20 @@ public class HouseController implements Controller {
     @FXML
     private Button logOutButton;
 
+    @FXML
+    private ToggleButton masterBedroomBlind;
 
-    //----------BUTTON METHODS----------//
+    @FXML
+    private ToggleButton kitchenBlind;
+
+    @FXML
+    private ToggleButton livingroomBlind;
+
+    @FXML
+    private ToggleButton bedroomBlind;
+
+
+    //----------LIGHT BUTTON METHODS----------//
 
     @FXML
     void onBathroomLightButton(ActionEvent event) {
@@ -99,6 +113,27 @@ public class HouseController implements Controller {
     void onExitButton(ActionEvent event) {
         //Close all communications opened*******************************************************************************
         Platform.exit();
+    }
+    //---------BLIND BUTTON METHODS----------//
+
+    @FXML
+    void onBedroomBlind(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onKitchenBlind(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onLivingroomBlind(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onMasterBedroomBlind(ActionEvent event) {
+
     }
 
 
@@ -175,6 +210,17 @@ public class HouseController implements Controller {
         }
         button.setText("OFF");
         button.setStyle("-fx-background-color: lightgray");
+    }
+
+    //Update the blinds
+    private void updateBlinds(ToggleButton button, String status){
+        if(status.equals("1") || status.equals("CLOSE")){
+            button.setText("OPEN");
+            button.setStyle("-fx-background-color: deepskyblue");
+            return;
+        }
+        button.setText("CLOSE");
+        button.setStyle("-fx-background-color: black");
     }
 
     //Get message to send to server
