@@ -16,10 +16,16 @@ import java.util.Map;
  */
 public final class Navigation {
 
-    private LinkedList<Scene> scenes = new LinkedList<Scene>(); // Navigation History
-    private Map<String, Controller> controllers = new HashMap<>(); //Container of controllers
     private static final String VIEW_PATH = "/org/academiadecodigo/enuminatti/ihouse/client/view";
-    private Stage stage; // reference to the application window
+
+    // Navigation History
+    private LinkedList<Scene> scenes = new LinkedList<>();
+
+    //Container of controllers
+    private Map<String, Controller> controllers = new HashMap<>();
+
+    // reference to the application window
+    private Stage stage;
 
     // static instance of this class
     private static Navigation instance = null;
@@ -48,7 +54,7 @@ public final class Navigation {
             fxmlLoader = new FXMLLoader(getClass().getResource(VIEW_PATH + "/" + view + ".fxml"));
             Parent root = fxmlLoader.load();
 
-            //Store the controller
+            //Save the controller
             controllers.put(view, fxmlLoader.<Controller>getController());
 
             // Create a new scene and add it to the stack
@@ -59,7 +65,7 @@ public final class Navigation {
             setScene(scene);
 
         } catch (IOException e) {
-            System.out.println("Failure to load view " + view + " : " + e.getMessage());
+            System.out.println("Failure no loading the view " + view + " : " + e.getMessage());
         }
     }
 

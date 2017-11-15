@@ -7,10 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
 public class LoginController implements Controller {
+
+    private static final String NAME = "login";
+
+    private ServiceCommunication serviceCommunication;
 
     private UserService userService;
 
@@ -62,6 +67,9 @@ public class LoginController implements Controller {
         }
 
         if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
+            if (serviceCommunication.initiateConnection(ipField.getText())) {
+
+            }
             Navigation.getInstance().loadScreen("house");
 
         } else {
@@ -78,4 +86,7 @@ public class LoginController implements Controller {
         this.userService = userService;
     }
 
+    public static String getNAME() {
+        return NAME;
+    }
 }

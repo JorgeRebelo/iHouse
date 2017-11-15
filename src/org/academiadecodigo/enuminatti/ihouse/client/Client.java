@@ -3,6 +3,8 @@ package org.academiadecodigo.enuminatti.ihouse.client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
 import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
@@ -20,11 +22,10 @@ import java.util.concurrent.Executors;
  */
 public class Client extends Application {
 
-    private UserService userService;
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
     private HouseController controller;
-    private ReceiveThread receiveThread;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -38,139 +39,27 @@ public class Client extends Application {
     public void init() {
 
         //Initialize service
-        userService = new MockUserService();
+        UserService userService = new MockUserService();
         userService.addUser(new User("admin", Security.getHash("admin")));
+
+        ServiceRegistry.getServiceRegistry().registerService(UserService.class.getSimpleName(), userService);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //Show UI
-        Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("house");
-        HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
-        //loginController.setUserService(userService);
+        //navigation singleton and set stage
+        Navigation navigation = Navigation.getInstance();
+        navigation.getInstance().setStage(primaryStage);
 
-        //We need access to the controller from the client, so we store it
-        controller = houseController;
-        controller.setClient(this);
+        //load screen LOGIN
+        navigation.loadScreen(LoginController.getNAME());
 
-        try {
-            //Initialize threads, sockets
-            clientSocket = new Socket("localhost", 8081);
-            receiveThread = new ReceiveThread();
+        //show the the LOGIN INTERFACE
+        primaryStage.setTitle("iHouse");
+        primaryStage.show();
 
-            //Add threads to threadpool
-            executors.submit(receiveThread);
-
-
-        } catch (Exception e) {
-            System.out.println("Couldn't connect.");
-        }
+        //CALL COMMUNICATION SERVICE
 
     }
-
-
-
-    //------------- WRITE TO SERVER ---------------//
-
-
-    public void write(String command) {
-
-        System.out.println("-----WRITE BLOCK------");
-        BufferedWriter outToServer;
-        try {
-
-            outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            System.out.println("Buffered Writer created.");
-
-            //send command to server
-            outToServer.write(command);
-            System.out.println(Thread.currentThread().getName() + " on write()");
-            outToServer.newLine();
-            outToServer.flush();
-
-            System.out.println("Data flushed to server");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("-----------------------" + "\n");
-    }
-
-
-
-
-//-------------------- THREAD --------------------//
-
-
-    class ReceiveThread implements Runnable {
-        BufferedReader bufferedReader = null;
-
-
-        public ReceiveThread() {
-            try {
-                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //receive status
-        public void read() {
-
-            String sentence;
-
-            /**
-             *              TO-DO:  - Client changing login view with the authentication condition
-             *                      - Client User class(optional)
-             *
-             *
-             *              When the client reads the first sentence, it must
-             *              equal true, and that is the condition for the loop to happen.
-             *
-             *              When this triggers, the view will be altered to the house one.
-
-             *
-             *
-             *              Side note: I'm not sure if our client also needs a user in its model,
-             *              since the actions will always start from the client itself
-
-             *
-             */
-
-
-            try {
-
-                while ((sentence = bufferedReader.readLine()) != null) {
-                    System.out.println("------READ BLOCK------");
-                    controller.getCommand(sentence);
-                }
-                disconnect();
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-            System.out.println("--------------------" + "\n");
-        }
-
-        @Override
-        public void run() {
-            System.out.println("Invoking the read: " + Thread.currentThread().getName() + "\n");
-            read();
-            }
-        }
-
-
-        public void disconnect(){
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
+}
