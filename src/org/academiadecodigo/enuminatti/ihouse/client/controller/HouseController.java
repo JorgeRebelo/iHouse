@@ -17,10 +17,8 @@ import java.util.List;
 public class HouseController implements Controller {
 
     private String houseStatus;
-    private List<Button> lights;
-    private List<ToggleButton> blinds;
+    private List<Button> elements;
     private Client client;
-
 
 
     @FXML
@@ -45,16 +43,16 @@ public class HouseController implements Controller {
     private Button logOutButton;
 
     @FXML
-    private ToggleButton masterBedroomBlind;
+    private Button masterBedroomBlind;
 
     @FXML
-    private ToggleButton kitchenBlind;
+    private Button kitchenBlind;
 
     @FXML
-    private ToggleButton livingroomBlind;
+    private Button livingroomBlind;
 
     @FXML
-    private ToggleButton bedroomBlind;
+    private Button bedroomBlind;
 
 
     //----------LIGHT BUTTON METHODS----------//
@@ -125,19 +123,22 @@ public class HouseController implements Controller {
 
     @FXML
     void onKitchenBlind(ActionEvent event) {
+        updateBlinds(kitchenBlind, kitchenBlind.getText());
+        client.write(getHouseStatus());
 
     }
 
     @FXML
     void onLivingroomBlind(ActionEvent event) {
-
+        updateBlinds(livingroomBlind, livingroomBlind.getText());
+        client.write(getHouseStatus());
     }
 
     @FXML
     void onMasterBedroomBlind(ActionEvent event) {
-
+        updateBlinds(masterBedroomBlind, masterBedroomBlind.getText());
+        client.write(getHouseStatus());
     }
-
 
 
     //---------CONTROLLER METHODS----------//
@@ -151,20 +152,21 @@ public class HouseController implements Controller {
         assert bathroomLightButton != null : "fx:id=\"bathroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
         assert exitButton != null : "fx:id=\"exitButton\" was not injected: check your FXML file 'house.fxml'.";
         assert logOutButton != null : "fx:id=\"logOutButton\" was not injected: check your FXML file 'house.fxml'.";
+        assert masterBedroomBlind != null : "fx:id=\"masterBedroomBlind\" was not injected: check your FXML file 'house.fxml'.";
+        assert kitchenBlind != null : "fx:id=\"kitchenBlind\" was not injected: check your FXML file 'house.fxml'.";
+        assert livingroomBlind != null : "fx:id=\"livingroomBlind\" was not injected: check your FXML file 'house.fxml'.";
+        assert bedroomBlind != null : "fx:id=\"bedroomBlind\" was not injected: check your FXML file 'house.fxml'.";
 
-        lights = new LinkedList<>();
-        lights.add(masterBedroomLightButton);
-        lights.add(bedroomLightButton);
-        lights.add(livingroomLightButton);
-        lights.add(kitchenLightButton);
-        lights.add(bathroomLightButton);
-
-
-        blinds = new LinkedList<>();
-        blinds.add(masterBedroomBlind);
-        blinds.add(kitchenBlind);
-        blinds.add(livingroomBlind);
-        blinds.add(bedroomBlind);
+        elements = new LinkedList<>();
+        elements.add(masterBedroomLightButton);
+        elements.add(bedroomLightButton);
+        elements.add(livingroomLightButton);
+        elements.add(kitchenLightButton);
+        elements.add(bathroomLightButton);
+        elements.add(masterBedroomBlind);
+        elements.add(kitchenBlind);
+        elements.add(livingroomBlind);
+        elements.add(bedroomBlind);
 
     }
 
@@ -212,7 +214,7 @@ public class HouseController implements Controller {
 
     //Update the lights
     private void updateLights(Button button, String status) {
-        if(status.equals("1") || status.equals("OFF")) {
+        if (status.equals("1") || status.equals("OFF")) {
             button.setText("ON");
             button.setStyle("-fx-background-color: yellow");
             return;
@@ -222,8 +224,8 @@ public class HouseController implements Controller {
     }
 
     //Update the blinds
-    private void updateBlinds(ToggleButton button, String status){
-        if(status.equals("1") || status.equals("CLOSE")){
+    private void updateBlinds(Button button, String status) {
+        if (status.equals("1") || status.equals("CLOSE")) {
             button.setText("OPEN");
             button.setStyle("-fx-background-color: deepskyblue");
             return;
@@ -233,27 +235,46 @@ public class HouseController implements Controller {
     }
 
     //Get message to send to server
-    private String getHouseStatus(){
+    private String getHouseStatus() {
 
-        houseStatus = "";
+        String lampStatus = "";
 
-        for (int button = 0; button < lights.size(); button++) {
-            String lightStatus = null;
+        for (int button = 0; button < elements.size(); button++) {
+            String lightStatus;
 
             //for every iteration, know how the light is right now
-            if(lights.get(button).getText().equals("OFF") && b){
+            if (elements.get(button).getText().equals("OFF")) {
                 lightStatus = "0";
-            } else { lightStatus = "1";}
+            } else {
+                lightStatus = "1";
+            }
 
-
-            houseStatus += lights.get(button).getId() + "=" + lightStatus + "/";
+            lampStatus += elements.get(button).getId() + "=" + lightStatus + "/";
         }
 
-        System.out.println("Click message: " + houseStatus);
-        return houseStatus;
+        return blindStatus() + lampStatus;
     }
 
-    public void setClient(Client client){
+
+    private String blindStatus() {
+
+        String status = "";
+
+        for (int button = 0; button < elements.size(); button++) {
+
+            //for every iteration, know how the blind is right now
+            if (elements.get(button).getText().equals("CLOSE")) {
+                status = "0";
+            } else {
+                status = "1";
+            }
+
+            status = elements.get(button).getId() + "=" + status + "/";
+        }
+        return status;
+    }
+
+    public void setClient(Client client) {
         this.client = client;
     }
 }

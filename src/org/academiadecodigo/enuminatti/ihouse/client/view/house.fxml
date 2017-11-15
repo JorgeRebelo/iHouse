@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -18,7 +17,7 @@
       <Button fx:id="masterBedroomLightButton" layoutX="284.0" layoutY="71.0" mnemonicParsing="false" onAction="#onMasterBedroomLightButton" text="OFF" />
       <Button fx:id="bedroomLightButton" layoutX="284.0" layoutY="200.0" mnemonicParsing="false" onAction="#onBedroomLightButton" text="OFF" />
       <Button fx:id="livingroomLightButton" layoutX="61.0" layoutY="260.0" mnemonicParsing="false" onAction="#onLivingroomLightButton" text="OFF" />
-      <Button fx:id="kitchenLightButton" layoutX="212.0" layoutY="321.0" mnemonicParsing="false" onAction="#onKitchenLightButton" text="OFF" />
+      <Button fx:id="kitchenLightButton" layoutX="220.0" layoutY="316.0" mnemonicParsing="false" onAction="#onKitchenLightButton" text="OFF" />
       <Button fx:id="bathroomLightButton" layoutX="120.0" layoutY="51.0" mnemonicParsing="false" onAction="#onBathroomLightButton" text="OFF" />
       <Button fx:id="exitButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="40.0" prefWidth="126.0" text="EXIT" />
       <Button fx:id="logOutButton" layoutX="400.0" layoutY="321.0" mnemonicParsing="false" onAction="#onLogoutButton" prefHeight="40.0" prefWidth="126.0" text="LOGOUT" />
@@ -31,10 +30,9 @@
             <Image url="@../../../../../../../resources/iHouse_logo.png" />
          </image>
       </ImageView>
-      <ToggleButton layoutX="-18.0" layoutY="65.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="63.0" rotate="270.0" text="CLOSE" />
-      <ToggleButton layoutX="273.0" layoutY="-1.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="63.0" text="CLOSE" />
-      <ToggleButton layoutX="223.0" layoutY="373.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="63.0" text="CLOSE" />
-      <ToggleButton layoutX="61.0" layoutY="373.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="63.0" text="CLOSE" />
-      <ToggleButton layoutX="355.0" layoutY="200.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="63.0" rotate="-90.0" text="CLOSE" />
+      <Button fx:id="masterBedroomBlind" layoutX="275.0" mnemonicParsing="false" onAction="#onMasterBedroomBlind" text="CLOSE" />
+      <Button fx:id="livingroomBlind" layoutX="61.0" layoutY="373.0" mnemonicParsing="false" onAction="#onLivingroomBlind" text="CLOSE" />
+      <Button fx:id="kitchenBlind" layoutX="245.0" layoutY="373.0" mnemonicParsing="false" onAction="#onKitchenBlind" text="CLOSE" />
+      <Button fx:id="bedroomBlind" layoutX="355.0" layoutY="198.0" mnemonicParsing="false" onAction="#onBedroomBlind" rotate="-90.0" text="CLOSE" />
    </children>
 </Pane>
