@@ -128,7 +128,8 @@ public class HouseController implements Controller {
     //Get command from server
     public void getCommand(String serverCommand) {
 
-        System.out.println("getCommand() called");
+        System.out.println("getCommand() executing command: " + serverCommand);
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +137,7 @@ public class HouseController implements Controller {
                 System.out.println("Platform Runlater: " + Thread.currentThread().getName());
 
                 String[] lamp = serverCommand.split("/");
-                System.out.println("getCommand() executing command: " + serverCommand);
+
 
                 for (int i = 0; i < lamp.length; i++) {
 
@@ -195,7 +196,8 @@ public class HouseController implements Controller {
             houseStatus += lights.get(button).getId() + "=" + lightStatus + "/";
         }
 
-        System.out.println("Click message: " + houseStatus);
+        System.out.println("Client house updated!");
+        System.out.println("-----------------------" + "\n");
         return houseStatus;
     }
 

@@ -29,13 +29,12 @@ public class Server {
 
         //Initialize a server, a thread pool and a worker list. Give him an imaginary house to work with.
         Server server = new Server();
-        server.threadPool = Executors.newCachedThreadPool();
-        server.workerList = new LinkedList<>();
-        server.house = new House();
-        server.readWrite = new ReadWrite();
-
         try {
             server.svSocket = new ServerSocket(8081);
+            server.threadPool = Executors.newCachedThreadPool();
+            server.workerList = new LinkedList<>();
+            server.house = new House();
+            server.readWrite = new ReadWrite();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,6 +42,7 @@ public class Server {
         //Create a new thread accepting clients
         AcceptClients acceptThread = server.new AcceptClients(server.svSocket);
         server.threadPool.submit(acceptThread);
+
 
     }
 
@@ -65,7 +65,7 @@ public class Server {
                     //and a worker list
                     Socket clientSocket;
                     clientSocket = svSocket.accept();
-                    System.out.println(">Client connected");
+                    System.out.println("\n" + "--------------------" + "\n" + ">Client connected");
 
                     ServerWorker svWorker = new ServerWorker(clientSocket);
                     threadPool.submit(svWorker);
@@ -112,6 +112,8 @@ public class Server {
         @Override
         public void run() {
 
+
+
             /**
              *
              *             TO-DO:   - Server database (file)
@@ -140,7 +142,7 @@ public class Server {
             //Send the first update of how the server is currently
             houseState = readWrite.read("resources/saveFile");
             writer.println(houseState);
-            System.out.println(">First update sent");
+            System.out.println(">First update sent" + "\n" + "--------------------");
 
 
             while (true) {
@@ -149,7 +151,7 @@ public class Server {
                     //read command from client
                     clientCMD = reader.readLine();
                     if (clientCMD == null) {
-                        System.out.println(">Client disconnected");
+                        System.out.println("\n" + ">Client disconnected" + "\n" + "------------------");
                         disconnect();
                         break;
                     }

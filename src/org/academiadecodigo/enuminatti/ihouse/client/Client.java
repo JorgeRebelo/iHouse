@@ -30,6 +30,7 @@ public class Client extends Application {
         launch(args);
     }
 
+
     //----------------JAVA FX-----------------//
 
 
@@ -70,11 +71,13 @@ public class Client extends Application {
     }
 
 
+
     //------------- WRITE TO SERVER ---------------//
+
 
     public void write(String command) {
 
-        System.out.println("-------WRITE BLOCK-------");
+        System.out.println("-----WRITE BLOCK------");
         BufferedWriter outToServer;
         try {
 
@@ -93,12 +96,14 @@ public class Client extends Application {
             e.printStackTrace();
         }
 
-        System.out.println("-----------------------");
+        System.out.println("-----------------------" + "\n");
     }
 
 
 
+
 //-------------------- THREAD --------------------//
+
 
     class ReceiveThread implements Runnable {
         BufferedReader bufferedReader = null;
@@ -115,6 +120,8 @@ public class Client extends Application {
 
         //receive status
         public void read() {
+
+            String sentence;
 
             /**
              *              TO-DO:  - Client changing login view with the authentication condition
@@ -134,25 +141,14 @@ public class Client extends Application {
              *
              */
 
-            System.out.println("------READ BLOCK------" + Thread.currentThread().getName());
 
             try {
 
-                String sentence = null;
-                sentence = bufferedReader.readLine();
-
-                if (sentence == null) {
-                    bufferedReader.close();
-                    clientSocket.close();
+                while ((sentence = bufferedReader.readLine()) != null) {
+                    System.out.println("------READ BLOCK------");
+                    controller.getCommand(sentence);
                 }
-
-                System.out.println("Command read: " + sentence);
-
-
-                System.out.println(Thread.currentThread().getName() + " on read()");
-                controller.getCommand(sentence);
-                System.out.println("Client House Updated!");
-
+                disconnect();
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -163,19 +159,18 @@ public class Client extends Application {
 
         @Override
         public void run() {
-            System.out.println("Invoking the run: " + Thread.currentThread().getName());
-            while (true) {
-                read();
+            System.out.println("Invoking the read: " + Thread.currentThread().getName() + "\n");
+            read();
+            }
+        }
+
+
+        public void disconnect(){
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
-
-    public void disconnect(){
-        try {
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
 
