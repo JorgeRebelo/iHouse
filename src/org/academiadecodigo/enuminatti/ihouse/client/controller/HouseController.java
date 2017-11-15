@@ -18,6 +18,7 @@ public class HouseController implements Controller {
 
     private String houseStatus;
     private List<Button> lights;
+    private List<ToggleButton> blinds;
     private Client client;
 
 
@@ -118,7 +119,8 @@ public class HouseController implements Controller {
 
     @FXML
     void onBedroomBlind(ActionEvent event) {
-
+        updateBlinds(bedroomBlind, bedroomBlind.getText());
+        client.write(getHouseStatus());
     }
 
     @FXML
@@ -156,6 +158,13 @@ public class HouseController implements Controller {
         lights.add(livingroomLightButton);
         lights.add(kitchenLightButton);
         lights.add(bathroomLightButton);
+
+
+        blinds = new LinkedList<>();
+        blinds.add(masterBedroomBlind);
+        blinds.add(kitchenBlind);
+        blinds.add(livingroomBlind);
+        blinds.add(bedroomBlind);
 
     }
 
@@ -232,7 +241,7 @@ public class HouseController implements Controller {
             String lightStatus = null;
 
             //for every iteration, know how the light is right now
-            if(lights.get(button).getText().equals("OFF")){
+            if(lights.get(button).getText().equals("OFF") && b){
                 lightStatus = "0";
             } else { lightStatus = "1";}
 
