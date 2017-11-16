@@ -248,33 +248,13 @@ public class HouseController implements Controller {
     }
 
     //Get message to send to server
-    private String getHouseStatus() {
+    /*private String blindStatus() {
 
-        String lampStatus = "";
-
-        for (int button = 0; button < elements.size(); button++) {
-            String lightStatus;
-
-            //for every iteration, know how the light is right now
-            if (elements.get(button).getText().equals("OFF")) {
-                lightStatus = "0";
-            } else {
-                lightStatus = "1";
-            }
-
-            lampStatus += elements.get(button).getId() + "=" + lightStatus + "/";
-        }
-
-        return blindStatus() + lampStatus;
-    }
-
-
-    private String blindStatus() {
-
-        String status = "";
+        String update = "";
 
         for (int button = 0; button < elements.size(); button++) {
 
+            String status = "";
             //for every iteration, know how the blind is right now
             if (elements.get(button).getText().equals("CLOSE")) {
                 status = "0";
@@ -282,10 +262,32 @@ public class HouseController implements Controller {
                 status = "1";
             }
 
-            status = elements.get(button).getId() + "=" + status + "/";
+            update = elements.get(button).getId() + "=" + status + "/";
         }
-        return status;
+        return update;
+    }*/
+
+    private String getHouseStatus() {
+
+        String lampStatus = "";
+
+        for (int button = 0; button < elements.size(); button++) {
+            String elementStatus;
+
+            //for every iteration, know how the light is right now
+            if (elements.get(button).getText().equals("OFF") || elements.get(button).getText().equals("CLOSE")) {
+                elementStatus = "0";
+            } else {
+                elementStatus = "1";
+            }
+
+            lampStatus += elements.get(button).getId() + "=" + elementStatus + "/";
+        }
+
+        return lampStatus;
     }
+
+
 
     public void setClient(Client client) {
         this.client = client;
