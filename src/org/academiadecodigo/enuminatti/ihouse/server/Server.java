@@ -3,11 +3,11 @@ package org.academiadecodigo.enuminatti.ihouse.server;
 import org.academiadecodigo.enuminatti.ihouse.server.model.House;
 import org.academiadecodigo.enuminatti.ihouse.server.model.ReadWrite;
 import org.academiadecodigo.enuminatti.ihouse.server.model.User;
+import org.academiadecodigo.enuminatti.ihouse.server.model.UserManager;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +29,8 @@ public class Server {
 
         //Initialize a server, a thread pool and a worker list. Give him an imaginary house to work with.
         Server server = new Server();
+
+
         try {
             server.svSocket = new ServerSocket(8081);
             server.threadPool = Executors.newCachedThreadPool();
@@ -40,20 +42,30 @@ public class Server {
         }
 
         //Create a new thread accepting clients
-        AcceptClients acceptThread = server.new AcceptClients(server.svSocket);
+        ConnectionThread acceptThread = server.new ConnectionThread(server.svSocket);
         server.threadPool.submit(acceptThread);
 
 
     }
 
+    private void broadcast(String message) {
 
-    class AcceptClients implements Runnable {
+        //Iterate all workers to write to their sockets
+        for (ServerWorker svWorker : workerList) {
+            svWorker.write(message);
+        }
+
+    }
+
+    class ConnectionThread implements Runnable {
 
         ServerSocket svSocket;
+        UserManager userManager;
 
-        public AcceptClients(ServerSocket svSocket) {
+        ConnectionThread(ServerSocket svSocket) {
             this.svSocket = svSocket;
         }
+
 
         @Override
         public void run() {
@@ -67,9 +79,9 @@ public class Server {
                     clientSocket = svSocket.accept();
                     System.out.println("\n" + "--------------------" + "\n" + ">Client connected");
 
-                    ServerWorker svWorker = new ServerWorker(clientSocket);
-                    threadPool.submit(svWorker);
-                    workerList.add(svWorker);
+                    UserAuthenticator validator = new UserAuthenticator(clientSocket);
+                    threadPool.submit(validator);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -78,13 +90,55 @@ public class Server {
         }
     }
 
-    private void broadcast(String message) {
+    class UserAuthenticator implements Runnable {
 
-        //Iterate all workers to write to their sockets
-        for (ServerWorker svWorker : workerList) {
-            svWorker.write(message);
+        Socket clientSocket;
+        BufferedReader reader;
+        UserManager userManager;
+        String username;
+        String password;
+
+        UserAuthenticator(Socket socket){
+            clientSocket = socket;
+            userManager = new UserManager();
+            try {
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            } catch (IOException e) {
+                System.out.println("Can't create reader to authenticate user");
+            }
         }
 
+        private void validate(){
+
+            String input = null;
+
+            try {
+                input = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //needs regex of protocol
+            String[] splitInput = input.split("-");
+
+            username = splitInput[0];
+            password = splitInput[1];
+        }
+
+
+
+
+        @Override
+        public void run() {
+            while(!userManager.authenticate(username, password)){
+                validate();
+            }
+
+            User user = new User(username, password);
+            ServerWorker svWorker = new ServerWorker(clientSocket, user);
+            threadPool.submit(svWorker);
+            workerList.add(svWorker);
+        }
     }
 
     class ServerWorker implements Runnable {
@@ -97,8 +151,9 @@ public class Server {
         private PrintWriter writer;
 
         //Constructor, recieves the client's socket and instantiates a new reader and writer
-        public ServerWorker(Socket socket) {
-            this.clientSocket = socket;
+        public ServerWorker(Socket socket, User user) {
+            clientSocket = socket;
+            this.user = user;
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 writer = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -189,7 +244,6 @@ public class Server {
         }
 
     }
-
 
 }
 

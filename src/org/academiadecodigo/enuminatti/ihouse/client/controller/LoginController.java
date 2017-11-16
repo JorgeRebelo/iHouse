@@ -7,12 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.academiadecodigo.enuminatti.ihouse.client.Client;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
 public class LoginController implements Controller {
 
-    private UserService userService;
+    private Client client;
 
     @FXML // fx:id="introLoginButton"
     private Button introLoginButton; // Value injected by FXMLLoader
@@ -46,6 +47,12 @@ public class LoginController implements Controller {
     @FXML
     void onIntroLoginButton(ActionEvent event) {
 
+        //WILL HAVE TO BE MODIFIED
+
+
+        client.write(sendRequest());
+
+        /*
         if (ipField.getText().isEmpty()) {
             ipNotFoundLabel.setVisible(true);
             return;
@@ -66,16 +73,23 @@ public class LoginController implements Controller {
 
         } else {
             wrongPasswordLabel.setVisible(true);
+        }*/
+
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public String sendRequest(){
+        String request = null;
+
+        if(usernameField.getText().length() > 3 & passwordField.getText().length() > 3){
+            request += usernameField.getText() + "-" + passwordField.getText();
         }
 
-    }
+        System.out.println("Request: " + request);
 
-    public UserService getUserService() {
-        return userService;
+        return request;
     }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
 }

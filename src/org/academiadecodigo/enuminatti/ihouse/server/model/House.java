@@ -34,6 +34,7 @@ public class House {
     }
 
     public String sendUpdate() {
+
         String state = "";
         for (String key : elements.keySet()) {
             state += key + "=" + String.valueOf(elements.get(key).byteValue()) + "/";
