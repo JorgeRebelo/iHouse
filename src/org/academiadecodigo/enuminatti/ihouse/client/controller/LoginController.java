@@ -53,9 +53,9 @@ public class LoginController implements Controller {
     @FXML
     void onIntroLoginButton(ActionEvent event) {
 
-        ipField.setText("admin");
-        usernameField.setText("admin");
-        passwordField.setText("admin");
+        ipField.setText("admin"); //////////////////////////////////////////////////////////////////////////////////////
+        usernameField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
+        passwordField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
 
         if (ipField.getText().isEmpty()) {
             ipNotFoundLabel.setVisible(true);
@@ -81,7 +81,7 @@ public class LoginController implements Controller {
         serviceCommunication = new ServiceCommunication();
 
         if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
-            //if (serviceCommunication.initiateConnection(ipField.getText())) {
+            //if (serviceCommunication.initiateConnection(ipField.getText())) {  ///////////////////////////////////////
             System.out.println("CENAS" + serviceCommunication);
             serviceCommunication.initiateConnection("localhost");
             HouseController.setServiceCommunication(serviceCommunication);
@@ -102,5 +102,16 @@ public class LoginController implements Controller {
     public void getCommand(String sentence) {
         System.out.println("ESTOU NO LOGIN");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////ISTO E ESTUPIDO ESTAR AQUI
+    }
+    public String sendRequest(){
+        String request = null;
+
+        if(usernameField.getText().length() >= 3 & passwordField.getText().length() >= 3){
+            request = usernameField.getText() + "-" + passwordField.getText();
+        }
+
+        System.out.println("Request: " + request);
+
+        return request;
     }
 }

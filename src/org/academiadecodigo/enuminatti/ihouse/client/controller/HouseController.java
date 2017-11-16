@@ -20,8 +20,8 @@ public class HouseController implements Controller {
     private static final String NAME = "house";
 
     private String houseStatus;
-    private List<Button> lights;
     static ServiceCommunication serviceCommunication1;
+    private List<Button> elements;
 
     @FXML
     private Button masterBedroomLightButton;
@@ -43,6 +43,18 @@ public class HouseController implements Controller {
 
     @FXML
     private Button logOutButton;
+
+    @FXML
+    private Button masterBedroomBlind;
+
+    @FXML
+    private Button kitchenBlind;
+
+    @FXML
+    private Button livingroomBlind;
+
+    @FXML
+    private Button bedroomBlind;
 
 
     //----------BUTTON METHODS----------//
@@ -104,24 +116,55 @@ public class HouseController implements Controller {
         //Close all communications opened*******************************************************************************
         Platform.exit();
     }
+    //---------BLIND BUTTON METHODS----------//
+
+    @FXML
+    void onBedroomBlind(ActionEvent event) {
+        updateBlinds(bedroomBlind, bedroomBlind.getText());
+        serviceCommunication1.write(getHouseStatus());
+    }
+
+    @FXML
+    void onKitchenBlind(ActionEvent event) {
+        updateBlinds(kitchenBlind, kitchenBlind.getText());
+        serviceCommunication1.write(getHouseStatus());
+
+    }
+
+    @FXML
+    void onLivingroomBlind(ActionEvent event) {
+        updateBlinds(livingroomBlind, livingroomBlind.getText());
+        serviceCommunication1.write(getHouseStatus());
+    }
+
+    @FXML
+    void onMasterBedroomBlind(ActionEvent event) {
+        updateBlinds(masterBedroomBlind, masterBedroomBlind.getText());
+        serviceCommunication1.write(getHouseStatus());
+    }
+
 
     //---------CONTROLLER METHODS----------//
     @FXML
     public void initialize() {
 
-        lights = new LinkedList<>();
-        lights.add(masterBedroomLightButton);
-        lights.add(bedroomLightButton);
-        lights.add(livingroomLightButton);
-        lights.add(kitchenLightButton);
-        lights.add(bathroomLightButton);
+        elements = new LinkedList<>();
+        elements.add(masterBedroomLightButton);
+        elements.add(bedroomLightButton);
+        elements.add(livingroomLightButton);
+        elements.add(kitchenLightButton);
+        elements.add(bathroomLightButton);
+        elements.add(masterBedroomBlind);
+        elements.add(kitchenBlind);
+        elements.add(livingroomBlind);
+        elements.add(bedroomBlind);
 
     }
 
     //Get command from server
     public void getCommand(String serverCommand) {
 
-        System.out.println("getCommand() executing command: " + serverCommand);
+        System.out.println("getCommand() called");
 
         Platform.runLater(new Runnable() {
             @Override
@@ -129,13 +172,13 @@ public class HouseController implements Controller {
 
                 System.out.println("Platform Runlater: " + Thread.currentThread().getName());
 
-                String[] lamp = serverCommand.split("/");
+                String[] element = serverCommand.split("/");
+                System.out.println("getCommand() executing command: " + serverCommand);
 
+                for (int i = 0; i < element.length; i++) {
 
-                for (int i = 0; i < lamp.length; i++) {
-
-                    String[] status = lamp[i].split("=");
-                    System.out.println("Lamp :  " + status[0] + status[1] + " ");
+                    String[] status = element[i].split("=");
+                    System.out.println("Element :  " + status[0] + " -> " + status[1] + " ");
 
                     //this is not good yet..
                     switch (status[0]) {
@@ -154,43 +197,64 @@ public class HouseController implements Controller {
                         case "kitchenLightButton":
                             updateLights(kitchenLightButton, status[1]);
                             break;
+                        case "livingroomBlind":
+                            updateBlinds(livingroomBlind, status[1]);
+                            break;
+                        case "kitchenBlind":
+                            updateBlinds(kitchenBlind, status[1]);
+                            break;
+                        case "masterBedroomBlind":
+                            updateBlinds(masterBedroomBlind, status[1]);
+                            break;
+                        case "bedroomBlind":
+                            updateBlinds(bedroomBlind, status[1]);
+                            break;
                     }
                 }
             }
         });
-
     }
 
     //Update the lights
     private void updateLights(Button button, String status) {
-
-        if(status.equals("1") || status.equals("OFF")) {
+        if (status.equals("1") || status.equals("OFF")) {
             button.setText("ON");
-
             button.setStyle("-fx-background-color: yellow");
-           //button.setStyle("-fx-background-radius: 10em");
+            //button.setStyle("-fx-background-radius: 10em");
             return;
         }
         button.setText("OFF");
         button.setStyle("-fx-background-color: lightgray");
+    }
 
+    //Update the blinds
+    private void updateBlinds(Button button, String status) {
+        if (status.equals("1") || status.equals("CLOSE")) {
+            button.setText("OPEN");
+            button.setStyle("-fx-background-color: deepskyblue");
+            return;
+        }
+        button.setText("CLOSE");
+        button.setStyle("-fx-background-color: white");
     }
 
     //Get message to send to server
-    private String getHouseStatus(){
+    private String getHouseStatus() {
 
         houseStatus = "";
 
-        for (int button = 0; button < lights.size(); button++) {
-            String lightStatus = null;
+        for (Button element : elements) {
+            String elementStatus;
 
             //for every iteration, know how the light is right now
-            if(lights.get(button).getText().equals("OFF")){
-                lightStatus = "0";
-            } else { lightStatus = "1";}
+            if (element.getText().equals("OFF") || element.getText().equals("CLOSE")) {
+                elementStatus = "0";
+            } else {
+                elementStatus = "1";
+            }
 
+            houseStatus += element.getId() + "=" + elementStatus + "/";
 
-            houseStatus += lights.get(button).getId() + "=" + lightStatus + "/";
         }
 
         System.out.println("ESTOU NA HOUSE");

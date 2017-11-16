@@ -6,6 +6,7 @@ import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
