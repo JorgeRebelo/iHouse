@@ -32,7 +32,7 @@ public class Server {
 
 
         try {
-            server.svSocket = new ServerSocket(8082);
+            server.svSocket = new ServerSocket(8080);
             server.threadPool = Executors.newCachedThreadPool();
             server.workerList = new LinkedList<>();
             server.house = new House();

@@ -63,7 +63,7 @@ public class Client extends Application {
 
         try {
             //Initialize threads, sockets
-            clientSocket = new Socket("localhost", 8081);
+            clientSocket = new Socket("localhost", 8080);
             receiveThread = new ReceiveThread();
             //Add threads to threadpool
             executors.submit(receiveThread);
