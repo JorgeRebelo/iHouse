@@ -217,12 +217,10 @@ public class HouseController implements Controller {
                         case "bedroomBlind":
                             updateBlinds(bedroomBlind, status[1]);
                             break;
-
                     }
                 }
             }
         });
-
     }
 
     //Update the lights
@@ -230,7 +228,7 @@ public class HouseController implements Controller {
         if (status.equals("1") || status.equals("OFF")) {
             button.setText("ON");
             button.setStyle("-fx-background-color: yellow");
-           //button.setStyle("-fx-background-radius: 10em");
+            //button.setStyle("-fx-background-radius: 10em");
             return;
         }
         button.setText("OFF");
@@ -249,21 +247,21 @@ public class HouseController implements Controller {
     }
 
     //Get message to send to server
-    private String getHouseStatus(){
+    private String getHouseStatus() {
 
         houseStatus = "";
 
-        for (int button = 0; button < elements.size(); button++) {
+        for (Button element : elements) {
             String elementStatus;
 
             //for every iteration, know how the light is right now
-            if (elements.get(button).getText().equals("OFF") || elements.get(button).getText().equals("CLOSE")) {
+            if (element.getText().equals("OFF") || element.getText().equals("CLOSE")) {
                 elementStatus = "0";
             } else {
                 elementStatus = "1";
             }
 
-            houseStatus += elements.get(button).getId() + "=" + elementStatus + "/";
+            houseStatus += element.getId() + "=" + elementStatus + "/";
 
         }
 
@@ -273,8 +271,7 @@ public class HouseController implements Controller {
     }
 
 
-
-    public void setClient(Client client){
+    public void setClient(Client client) {
         this.client = client;
     }
 }
