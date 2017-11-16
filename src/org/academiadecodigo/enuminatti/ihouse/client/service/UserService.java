@@ -1,6 +1,6 @@
 package org.academiadecodigo.enuminatti.ihouse.client.service;
 
-import org.academiadecodigo.enuminatti.ihouse.client.model.User;
+import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 
 public interface UserService {
 

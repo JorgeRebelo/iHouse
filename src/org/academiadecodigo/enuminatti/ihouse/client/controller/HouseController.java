@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
 import org.academiadecodigo.enuminatti.ihouse.client.Client;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
@@ -61,7 +60,7 @@ public class HouseController implements Controller {
     void onBathroomLightButton(ActionEvent event) {
 
         updateLights(bathroomLightButton, bathroomLightButton.getText());
-
+        //bathroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -70,7 +69,7 @@ public class HouseController implements Controller {
     void onBedroomLightButton(ActionEvent event) {
 
         updateLights(bedroomLightButton, bedroomLightButton.getText());
-
+        //bedroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -79,7 +78,7 @@ public class HouseController implements Controller {
     void onKitchenLightButton(ActionEvent event) {
 
         updateLights(kitchenLightButton, kitchenLightButton.getText());
-
+        //kitchenLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -88,7 +87,7 @@ public class HouseController implements Controller {
     void onLivingroomLightButton(ActionEvent event) {
 
         updateLights(livingroomLightButton, livingroomLightButton.getText());
-
+        //livingroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -97,7 +96,7 @@ public class HouseController implements Controller {
     void onMasterBedroomLightButton(ActionEvent event) {
 
         updateLights(masterBedroomLightButton, masterBedroomLightButton.getText());
-
+        //masterBedroomLightButton.setStyle("-fx-background-radius: 5em");
         client.write(getHouseStatus());
 
     }
@@ -110,6 +109,7 @@ public class HouseController implements Controller {
 
     @FXML
     void onExitButton(ActionEvent event) {
+        client.disconnect();
         //Close all communications opened*******************************************************************************
         Platform.exit();
     }
@@ -230,6 +230,7 @@ public class HouseController implements Controller {
         if (status.equals("1") || status.equals("OFF")) {
             button.setText("ON");
             button.setStyle("-fx-background-color: yellow");
+           //button.setStyle("-fx-background-radius: 10em");
             return;
         }
         button.setText("OFF");
@@ -248,28 +249,9 @@ public class HouseController implements Controller {
     }
 
     //Get message to send to server
-    /*private String blindStatus() {
+    private String getHouseStatus(){
 
-        String update = "";
-
-        for (int button = 0; button < elements.size(); button++) {
-
-            String status = "";
-            //for every iteration, know how the blind is right now
-            if (elements.get(button).getText().equals("CLOSE")) {
-                status = "0";
-            } else {
-                status = "1";
-            }
-
-            update = elements.get(button).getId() + "=" + status + "/";
-        }
-        return update;
-    }*/
-
-    private String getHouseStatus() {
-
-        String lampStatus = "";
+        houseStatus = "";
 
         for (int button = 0; button < elements.size(); button++) {
             String elementStatus;
@@ -281,15 +263,18 @@ public class HouseController implements Controller {
                 elementStatus = "1";
             }
 
-            lampStatus += elements.get(button).getId() + "=" + elementStatus + "/";
+            houseStatus += elements.get(button).getId() + "=" + elementStatus + "/";
+
         }
 
-        return lampStatus;
+        System.out.println("Client house updated!");
+        System.out.println("-----------------------" + "\n");
+        return houseStatus;
     }
 
 
 
-    public void setClient(Client client) {
+    public void setClient(Client client){
         this.client = client;
     }
 }
