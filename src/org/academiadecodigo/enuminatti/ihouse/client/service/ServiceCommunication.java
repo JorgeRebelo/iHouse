@@ -96,8 +96,8 @@ public class ServiceCommunication {
                     System.out.println("------READ BLOCK------");
                     System.out.println("TO SEND: " + sentence);
                     System.out.println(Navigation.getInstance().getController(HouseController.getNAME()));
-/*
 
+/*
                     synchronized (this) {
                         while (Navigation.getInstance().getController(HouseController.getNAME()) == null) {
 
