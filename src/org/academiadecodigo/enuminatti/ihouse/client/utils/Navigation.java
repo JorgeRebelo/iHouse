@@ -55,7 +55,7 @@ public final class Navigation {
             Parent root = fxmlLoader.load();
 
             //Save the controller
-            System.out.println("adding controller " + view);
+            //System.out.println("adding controller " + view);
             controllers.put(view, fxmlLoader.<Controller>getController());
 
             // Create a new scene and add it to the stack
@@ -93,7 +93,7 @@ public final class Navigation {
     }
 
     public Controller getController(String view) {
-        System.out.println("getting the view " + view);
+        //System.out.println("getting the view " + view);
        // System.out.println(controllers.get(view));
         return controllers.get(view);
     }

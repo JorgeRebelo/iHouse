@@ -45,13 +45,13 @@
             <Insets right="20.0" />
          </GridPane.margin>
       </Label>
-      <PasswordField fx:id="passwordField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <TextField fx:id="ipField" promptText="127. 0  . 0  . 0  . 1  " GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
+          <GridPane.margin>
+              <Insets />
+          </GridPane.margin>
       </TextField>
-      <TextField fx:id="usernameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+       <TextField fx:id="usernameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+       <PasswordField fx:id="passwordField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <ImageView fitHeight="170.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
          <image>
             <Image url="@/iHouse_logo_ext.png" />

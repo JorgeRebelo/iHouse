@@ -78,11 +78,8 @@ public class Server {
                     clientSocket = svSocket.accept();
                     System.out.println("\n" + "--------------------" + "\n" + ">Client connected");
 
-                    ServerWorker svWorker = new ServerWorker(clientSocket);
-                    threadPool.submit(svWorker);
-                    workerList.add(svWorker);
-                    //UserAuthenticator validator = new UserAuthenticator(clientSocket);
-                    //threadPool.submit(validator);
+                    UserAuthenticator validator = new UserAuthenticator(clientSocket);
+                    threadPool.submit(validator);
 
 
                 } catch (IOException e) {
@@ -107,13 +104,12 @@ public class Server {
             userManager = new UserManager();
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                writer = new PrintWriter(clientSocket.getOutputStream());
+                writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             } catch (IOException e) {
                 System.out.println("Can't create reader to authenticate user");
             }
             System.out.println("Socket: " + clientSocket);
-            writer.write("hello!");
         }
 
         private void validate(){
@@ -139,12 +135,18 @@ public class Server {
         @Override
         public void run() {
             System.out.println("Running run");
-            while(!userManager.authenticate(username, password)){
+
+            while(true){
                 validate();
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
+                if(userManager.authenticate(username, password)){
+                    writer.write("true");
+                    break;
+                }
                 writer.write("false");
             }
 
-            writer.write("true");
 
             //Add user to temporary storage
             User newUser = new User(username, password);
@@ -152,7 +154,7 @@ public class Server {
             System.out.println("\n>" + newUser.getUsername() + " connected");
 
 
-            ServerWorker svWorker = new ServerWorker(clientSocket);
+            ServerWorker svWorker = new ServerWorker(clientSocket, newUser);
             threadPool.submit(svWorker);
             workerList.add(svWorker);
         }
@@ -168,7 +170,7 @@ public class Server {
         private PrintWriter writer;
 
         //Constructor, recieves the client's socket and instantiates a new reader and writer
-        ServerWorker(Socket socket) {
+        ServerWorker(Socket socket, User user) {
             clientSocket = socket;
             this.user = user;
             try {
@@ -223,7 +225,7 @@ public class Server {
                     //read command from client
                     clientCMD = reader.readLine();
                     if (clientCMD == null) {
-                        System.out.println("\n>Client disconnected" + "\n" + "------------------");
+                        System.out.println("\n>" + user.getUsername() + " disconnected" + "\n" + "------------------");
                         disconnect();
                         break;
                     }
@@ -234,7 +236,7 @@ public class Server {
 
                 //House receives update from client and updates itself
                 house.receiveUpdate(clientCMD);
-                System.out.println("sent command: " + clientCMD);
+                System.out.println(user.getUsername() + " sent command: " + clientCMD);
 
                 //A new string is attributed to houseState to broadcast it to all clients
                 houseState = house.sendUpdate();

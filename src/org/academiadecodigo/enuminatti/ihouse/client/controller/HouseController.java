@@ -82,6 +82,7 @@ public class HouseController implements Controller {
 
         updateLights(kitchenLightButton, kitchenLightButton.getText());
         //kitchenLightButton.setStyle("-fx-background-radius: 5em");
+        System.out.println(getHouseStatus() + "  " + serviceCommunication1);
         serviceCommunication1.write(getHouseStatus());
 
     }
@@ -112,7 +113,7 @@ public class HouseController implements Controller {
 
     @FXML
     void onExitButton(ActionEvent event) {
-        serviceCommunication1.disconnect();
+
         //Close all communications opened*******************************************************************************
         Platform.exit();
     }
