@@ -12,6 +12,9 @@ public class UserManager {
     public UserManager(){
         users = new LinkedList<>();
         users.add(new User("Drake", "lol"));
+        users.add(new User("lol", "lol"));
+        users.add(new User("123", "123"));
+        users.add(new User("aaa", "aaa"));
     }
 
     public boolean authenticate(String username, String password){
@@ -20,18 +23,12 @@ public class UserManager {
                 return true;
             }
         }
-
         return false;
     }
 
 
-    public void addUser(String username, String password){
-        users.add(new User(username, password));
-    }
-
-
-    public void decodeInput(String input){
-        //this method will translate the input it receives into
+    public void addUser(User user){
+        users.add(user);
     }
 
 }

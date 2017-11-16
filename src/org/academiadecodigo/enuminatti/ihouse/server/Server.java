@@ -60,7 +60,6 @@ public class Server {
     class ConnectionThread implements Runnable {
 
         ServerSocket svSocket;
-        UserManager userManager;
 
         ConnectionThread(ServerSocket svSocket) {
             this.svSocket = svSocket;
@@ -79,8 +78,11 @@ public class Server {
                     clientSocket = svSocket.accept();
                     System.out.println("\n" + "--------------------" + "\n" + ">Client connected");
 
-                    UserAuthenticator validator = new UserAuthenticator(clientSocket);
-                    threadPool.submit(validator);
+                    ServerWorker svWorker = new ServerWorker(clientSocket);
+                    threadPool.submit(svWorker);
+                    workerList.add(svWorker);
+                    //UserAuthenticator validator = new UserAuthenticator(clientSocket);
+                    //threadPool.submit(validator);
 
 
                 } catch (IOException e) {
@@ -94,26 +96,34 @@ public class Server {
 
         Socket clientSocket;
         BufferedReader reader;
+        PrintWriter writer;
         UserManager userManager;
-        String username;
-        String password;
+        String username = null;
+        String password = null;
 
         UserAuthenticator(Socket socket){
+
             clientSocket = socket;
             userManager = new UserManager();
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new PrintWriter(clientSocket.getOutputStream());
+
             } catch (IOException e) {
                 System.out.println("Can't create reader to authenticate user");
             }
+            System.out.println("Socket: " + clientSocket);
+            writer.write("hello!");
         }
 
         private void validate(){
+            System.out.println("Waiting for input");
 
             String input = null;
 
             try {
                 input = reader.readLine();
+                System.out.println("Input: " + input);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -126,16 +136,23 @@ public class Server {
         }
 
 
-
-
         @Override
         public void run() {
+            System.out.println("Running run");
             while(!userManager.authenticate(username, password)){
                 validate();
+                writer.write("false");
             }
 
-            User user = new User(username, password);
-            ServerWorker svWorker = new ServerWorker(clientSocket, user);
+            writer.write("true");
+
+            //Add user to temporary storage
+            User newUser = new User(username, password);
+            userManager.addUser(newUser);
+            System.out.println("\n>" + newUser.getUsername() + " connected");
+
+
+            ServerWorker svWorker = new ServerWorker(clientSocket);
             threadPool.submit(svWorker);
             workerList.add(svWorker);
         }
@@ -151,7 +168,7 @@ public class Server {
         private PrintWriter writer;
 
         //Constructor, recieves the client's socket and instantiates a new reader and writer
-        public ServerWorker(Socket socket, User user) {
+        ServerWorker(Socket socket) {
             clientSocket = socket;
             this.user = user;
             try {
@@ -206,7 +223,7 @@ public class Server {
                     //read command from client
                     clientCMD = reader.readLine();
                     if (clientCMD == null) {
-                        System.out.println("\n" + ">Client disconnected" + "\n" + "------------------");
+                        System.out.println("\n>Client disconnected" + "\n" + "------------------");
                         disconnect();
                         break;
                     }
@@ -217,7 +234,7 @@ public class Server {
 
                 //House receives update from client and updates itself
                 house.receiveUpdate(clientCMD);
-                System.out.println("Server command: " + clientCMD);
+                System.out.println("sent command: " + clientCMD);
 
                 //A new string is attributed to houseState to broadcast it to all clients
                 houseState = house.sendUpdate();

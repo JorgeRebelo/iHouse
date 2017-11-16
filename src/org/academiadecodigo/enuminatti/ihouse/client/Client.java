@@ -49,22 +49,22 @@ public class Client extends Application {
 
         //Show UI
         Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("login");
-        //HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
-        LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
+        Navigation.getInstance().loadScreen("house");
+        HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
+        //LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
         //loginController.setUserService(userService);
 
         //We need access to the controllers from the client, so we store it
-        loginCtrl = loginController;
-        loginCtrl.setClient(this);
-        //houseCtrl = houseController;
-        //houseCtrl.setClient(this);
+
+        //loginCtrl = loginController;
+        //loginCtrl.setClient(this);
+        houseCtrl = houseController;
+        houseCtrl.setClient(this);
 
         try {
             //Initialize threads, sockets
             clientSocket = new Socket("localhost", 8081);
             receiveThread = new ReceiveThread();
-
             //Add threads to threadpool
             executors.submit(receiveThread);
 
@@ -83,6 +83,8 @@ public class Client extends Application {
 
         System.out.println("-----WRITE BLOCK------");
         BufferedWriter outToServer;
+
+        System.out.println("Command: " + command);
         try {
 
             outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));

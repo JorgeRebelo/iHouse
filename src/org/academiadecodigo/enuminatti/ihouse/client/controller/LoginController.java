@@ -49,7 +49,6 @@ public class LoginController implements Controller {
 
         //WILL HAVE TO BE MODIFIED
 
-
         client.write(sendRequest());
 
         /*
@@ -84,8 +83,8 @@ public class LoginController implements Controller {
     public String sendRequest(){
         String request = null;
 
-        if(usernameField.getText().length() > 3 & passwordField.getText().length() > 3){
-            request += usernameField.getText() + "-" + passwordField.getText();
+        if(usernameField.getText().length() >= 3 & passwordField.getText().length() >= 3){
+            request = usernameField.getText() + "-" + passwordField.getText();
         }
 
         System.out.println("Request: " + request);
