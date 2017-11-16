@@ -243,7 +243,7 @@ public class HouseController implements Controller {
             return;
         }
         button.setText("CLOSE");
-        button.setStyle("-fx-background-color: black");
+        button.setStyle("-fx-background-color: white");
     }
 
     //Get message to send to server

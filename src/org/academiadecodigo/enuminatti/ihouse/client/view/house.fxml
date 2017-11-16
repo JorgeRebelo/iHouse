@@ -30,9 +30,9 @@
             <Image url="@/iHouse_logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="masterBedroomBlind" layoutX="275.0" mnemonicParsing="false" onAction="#onMasterBedroomBlind" text="CLOSE" />
-      <Button fx:id="livingroomBlind" layoutX="61.0" layoutY="373.0" mnemonicParsing="false" onAction="#onLivingroomBlind" text="CLOSE" />
-      <Button fx:id="kitchenBlind" layoutX="245.0" layoutY="373.0" mnemonicParsing="false" onAction="#onKitchenBlind" text="CLOSE" />
-      <Button fx:id="bedroomBlind" layoutX="355.0" layoutY="198.0" mnemonicParsing="false" onAction="#onBedroomBlind" rotate="-90.0" text="CLOSE" />
+      <Button fx:id="masterBedroomBlind" layoutX="248.0" mnemonicParsing="false" onAction="#onMasterBedroomBlind" text="CLOSE" />
+      <Button fx:id="livingroomBlind" layoutX="38.0" layoutY="382.0" mnemonicParsing="false" onAction="#onLivingroomBlind" text="CLOSE" />
+      <Button fx:id="kitchenBlind" layoutX="191.0" layoutY="382.0" mnemonicParsing="false" onAction="#onKitchenBlind" text="CLOSE" />
+      <Button fx:id="bedroomBlind" layoutX="363.0" layoutY="203.0" mnemonicParsing="false" onAction="#onBedroomBlind" rotate="-90.0" text="CLOSE" />
    </children>
 </Pane>

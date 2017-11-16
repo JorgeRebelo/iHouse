@@ -30,7 +30,7 @@ public class Server {
         //Initialize a server, a thread pool and a worker list. Give him an imaginary house to work with.
         Server server = new Server();
         try {
-            server.svSocket = new ServerSocket(8081);
+            server.svSocket = new ServerSocket(8082);
             server.threadPool = Executors.newCachedThreadPool();
             server.workerList = new LinkedList<>();
             server.house = new House();

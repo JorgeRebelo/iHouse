@@ -9,6 +9,39 @@
     -fx-max-width: 45px;
     -fx-max-height: 45px;
 }
+#bedroomBlind {
+    -fx-min-width: 55px;
+    -fx-min-height: 18px;
+    -fx-max-width: 55px;
+    -fx-max-height: 18px;
+    -fx-font-size: 10;
+    -fx-background-radius: 0em;
+}
+#kitchenBlind {
+    -fx-min-width: 172px;
+    -fx-min-height: 18px;
+    -fx-max-width: 172px;
+    -fx-max-height: 18px;
+    -fx-font-size: 10;
+    -fx-background-radius: 0em;
+}
+#livingroomBlind {
+    -fx-min-width: 104px;
+    -fx-min-height: 18px;
+    -fx-max-width: 104px;
+    -fx-max-height: 18px;
+    -fx-font-size: 10;
+    -fx-background-radius: 0em;
+
+}
+#masterBedroomBlind {
+    -fx-min-width: 113px;
+    -fx-min-height: 18px;
+    -fx-max-width: 113px;
+    -fx-max-height: 18px;
+    -fx-font-size: 10;
+    -fx-background-radius: 0em;
+}
 .button{
     -fx-font-weight: bold;
 }
