@@ -53,6 +53,10 @@ public class LoginController implements Controller {
     @FXML
     void onIntroLoginButton(ActionEvent event) {
 
+        ipField.setText("admin");
+        usernameField.setText("admin");
+        passwordField.setText("admin");
+
         if (ipField.getText().isEmpty()) {
             ipNotFoundLabel.setVisible(true);
             return;

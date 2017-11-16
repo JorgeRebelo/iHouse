@@ -18,7 +18,7 @@
             <Image url="@/home_layout.png" />
          </image>
       </ImageView>
-      <Button fx:id="goBackButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onGoBackButton" prefHeight="40.0" prefWidth="126.0" text="GO BACK" />
+      <Button fx:id="goBackButton" layoutX="400.0" layoutY="360.0" mnemonicParsing="false" onAction="#onLogoutButton" prefHeight="40.0" prefWidth="126.0" text="GO BACK" />
       <Label layoutX="398.0" layoutY="219.0" rotate="90.0" text="Some text goes were" />
       <ImageView fitHeight="129.0" fitWidth="126.0" layoutX="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -110,6 +110,6 @@
             </GridPane>
          </children>
       </GridPane>
-      <Button fx:id="saveButton" layoutX="400.0" layoutY="320.0" mnemonicParsing="false" onAction="#onSaveButton" prefHeight="40.0" prefWidth="126.0" text="SAVE" />
+      <Button fx:id="saveButton" layoutX="400.0" layoutY="320.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="40.0" prefWidth="126.0" text="SAVE" />
    </children>
 </Pane>

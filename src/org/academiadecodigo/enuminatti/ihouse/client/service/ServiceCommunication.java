@@ -17,14 +17,21 @@ public class ServiceCommunication {
 
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
-    private ServiceCommunication.ReceiveThread receiveThread;
+    //  private ServiceCommunication.ReceiveThread receiveThread;
+
+    BufferedWriter outToServer;
 
     public void initiateConnection(String ip) {
 
         try {
             //Initialize threads, sockets
             clientSocket = new Socket(ip, 8080);
-            receiveThread = new ReceiveThread();
+
+
+
+
+
+            ReceiveThread receiveThread = new ReceiveThread();
 
             //Add threads to threadpool
             executors.submit(receiveThread);
@@ -40,10 +47,11 @@ public class ServiceCommunication {
 
         System.out.println("-----WRITE BLOCK------");
         System.out.println(command);
-        BufferedWriter outToServer;
-        try {
 
-            outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+        try {
+            if (outToServer == null) {
+                outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            }
             System.out.println("Buffered Writer created.");
 
             //send command to server
@@ -53,6 +61,8 @@ public class ServiceCommunication {
             outToServer.flush();
 
             System.out.println("Data flushed to server");
+
+            //receiveThread.run();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,9 +94,29 @@ public class ServiceCommunication {
 
                 while ((sentence = bufferedReader.readLine()) != null) {
                     System.out.println("------READ BLOCK------");
-                    System.out.println(sentence);
+                    System.out.println("TO SEND: " + sentence);
+                    System.out.println(Navigation.getInstance().getController(HouseController.getNAME()));
+/*
+
+                    synchronized (this) {
+                        while (Navigation.getInstance().getController(HouseController.getNAME()) == null) {
+
+                            try {
+                                wait();
+                            } catch (InterruptedException e){}
+                        }
+                    }
+*/
+
+                    boolean test = false;
+
+                    while (!test) {
+                        if (Navigation.getInstance().getController(HouseController.getNAME()) != null) {
+                            test = true;
+                        }
+                    }
+
                     Navigation.getInstance().getController(HouseController.getNAME()).getCommand(sentence);
-                    //Navigation.getInstance().getController("house").getCommand(sentence);
                 }
                 disconnect();
 

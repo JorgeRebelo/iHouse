@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.academiadecodigo.enuminatti.ihouse.client.Client;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
 import java.util.LinkedList;
@@ -108,21 +109,12 @@ public class HouseController implements Controller {
     @FXML
     public void initialize() {
 
-        assert masterBedroomLightButton != null : "fx:id=\"masterBedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert bedroomLightButton != null : "fx:id=\"bedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert livingroomLightButton != null : "fx:id=\"livingroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert kitchenLightButton != null : "fx:id=\"kitchenLightButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert bathroomLightButton != null : "fx:id=\"bathroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert exitButton != null : "fx:id=\"exitButton\" was not injected: check your FXML file 'house.fxml'.";
-        assert logOutButton != null : "fx:id=\"logOutButton\" was not injected: check your FXML file 'house.fxml'.";
-
         lights = new LinkedList<>();
         lights.add(masterBedroomLightButton);
         lights.add(bedroomLightButton);
         lights.add(livingroomLightButton);
         lights.add(kitchenLightButton);
         lights.add(bathroomLightButton);
-
 
     }
 
