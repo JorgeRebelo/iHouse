@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.academiadecodigo.enuminatti.ihouse.client.Client;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
 import java.util.LinkedList;
@@ -15,10 +16,11 @@ import java.util.List;
  */
 public class HouseController implements Controller {
 
+    private static final String NAME = "house";
+
     private String houseStatus;
     private List<Button> lights;
-    private Client client;
-
+    static ServiceCommunication serviceCommunication1;
 
     @FXML
     private Button masterBedroomLightButton;
@@ -43,13 +45,13 @@ public class HouseController implements Controller {
 
 
     //----------BUTTON METHODS----------//
-
     @FXML
     void onBathroomLightButton(ActionEvent event) {
 
         updateLights(bathroomLightButton, bathroomLightButton.getText());
         //bathroomLightButton.setStyle("-fx-background-radius: 5em");
-        client.write(getHouseStatus());
+
+        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -58,7 +60,7 @@ public class HouseController implements Controller {
 
         updateLights(bedroomLightButton, bedroomLightButton.getText());
         //bedroomLightButton.setStyle("-fx-background-radius: 5em");
-        client.write(getHouseStatus());
+        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -67,7 +69,7 @@ public class HouseController implements Controller {
 
         updateLights(kitchenLightButton, kitchenLightButton.getText());
         //kitchenLightButton.setStyle("-fx-background-radius: 5em");
-        client.write(getHouseStatus());
+        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -76,7 +78,7 @@ public class HouseController implements Controller {
 
         updateLights(livingroomLightButton, livingroomLightButton.getText());
         //livingroomLightButton.setStyle("-fx-background-radius: 5em");
-        client.write(getHouseStatus());
+        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -85,7 +87,7 @@ public class HouseController implements Controller {
 
         updateLights(masterBedroomLightButton, masterBedroomLightButton.getText());
         //masterBedroomLightButton.setStyle("-fx-background-radius: 5em");
-        client.write(getHouseStatus());
+        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -97,17 +99,14 @@ public class HouseController implements Controller {
 
     @FXML
     void onExitButton(ActionEvent event) {
-        client.disconnect();
+        serviceCommunication1.disconnect();
         //Close all communications opened*******************************************************************************
         Platform.exit();
     }
 
-
-
     //---------CONTROLLER METHODS----------//
-
     @FXML
-    void initialize() {
+    public void initialize() {
 
         assert masterBedroomLightButton != null : "fx:id=\"masterBedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
         assert bedroomLightButton != null : "fx:id=\"bedroomLightButton\" was not injected: check your FXML file 'house.fxml'.";
@@ -123,10 +122,6 @@ public class HouseController implements Controller {
         lights.add(livingroomLightButton);
         lights.add(kitchenLightButton);
         lights.add(bathroomLightButton);
-
-
-
-
 
 
     }
@@ -206,12 +201,18 @@ public class HouseController implements Controller {
             houseStatus += lights.get(button).getId() + "=" + lightStatus + "/";
         }
 
+        System.out.println("ESTOU NA HOUSE");
         System.out.println("Client house updated!");
         System.out.println("-----------------------" + "\n");
         return houseStatus;
     }
 
-    public void setClient(Client client){
-        this.client = client;
+
+    public static String getNAME() {
+        return NAME;
+    }
+
+    public static void setServiceCommunication(ServiceCommunication serviceCommunication) {
+        serviceCommunication1 = serviceCommunication;
     }
 }

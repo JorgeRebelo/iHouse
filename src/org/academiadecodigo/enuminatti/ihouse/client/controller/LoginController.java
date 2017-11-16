@@ -7,7 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.academiadecodigo.enuminatti.ihouse.client.service.Service;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
@@ -66,11 +68,21 @@ public class LoginController implements Controller {
             return;
         }
 
-        if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
-            if (serviceCommunication.initiateConnection(ipField.getText())) {
+        userService = (UserService) ServiceRegistry.getServiceRegistry().getService(UserService.class.getSimpleName());
 
-            }
-            Navigation.getInstance().loadScreen("house");
+        if (userService == null) {
+            throw new IllegalStateException("Unable to load user service from registry");
+        }
+
+        serviceCommunication = new ServiceCommunication();
+
+        if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
+            //if (serviceCommunication.initiateConnection(ipField.getText())) {
+            System.out.println("CENAS" + serviceCommunication);
+            serviceCommunication.initiateConnection("localhost");
+            HouseController.setServiceCommunication(serviceCommunication);
+            Navigation.getInstance().loadScreen(HouseController.getNAME());
+
 
         } else {
             wrongPasswordLabel.setVisible(true);
@@ -78,15 +90,13 @@ public class LoginController implements Controller {
 
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
     public static String getNAME() {
         return NAME;
+    }
+
+    @Override
+    public void getCommand(String sentence) {
+        System.out.println("ESTOU NO LOGIN");
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////ISTO E ESTUPIDO ESTAR AQUI
     }
 }

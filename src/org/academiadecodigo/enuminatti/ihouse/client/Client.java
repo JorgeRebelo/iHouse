@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
+import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
 import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
@@ -22,18 +23,11 @@ import java.util.concurrent.Executors;
  */
 public class Client extends Application {
 
-    private Socket clientSocket;
-    private ExecutorService executors = Executors.newFixedThreadPool(2);
-    private HouseController controller;
-
+    ServiceCommunication serviceCommunication;
 
     public static void main(String[] args) {
         launch(args);
     }
-
-
-    //----------------JAVA FX-----------------//
-
 
     @Override
     public void init() {

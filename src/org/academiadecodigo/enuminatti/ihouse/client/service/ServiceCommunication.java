@@ -1,6 +1,8 @@
 package org.academiadecodigo.enuminatti.ihouse.client.service;
 
 import org.academiadecodigo.enuminatti.ihouse.client.controller.Controller;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
 import java.io.*;
@@ -17,29 +19,27 @@ public class ServiceCommunication {
     private ExecutorService executors = Executors.newFixedThreadPool(2);
     private ServiceCommunication.ReceiveThread receiveThread;
 
-    public boolean initiateConnection(String ip) {
+    public void initiateConnection(String ip) {
 
         try {
             //Initialize threads, sockets
-            clientSocket = new Socket(ip, 8081);
+            clientSocket = new Socket(ip, 8080);
             receiveThread = new ReceiveThread();
 
             //Add threads to threadpool
             executors.submit(receiveThread);
 
-            return true;
 
         } catch (Exception e) {
             System.out.println("Couldn't connect.");
         }
-
-        return false;
     }
 
     //------------- WRITE TO SERVER ---------------//
     public void write(String command) {
 
         System.out.println("-----WRITE BLOCK------");
+        System.out.println(command);
         BufferedWriter outToServer;
         try {
 
@@ -84,7 +84,9 @@ public class ServiceCommunication {
 
                 while ((sentence = bufferedReader.readLine()) != null) {
                     System.out.println("------READ BLOCK------");
-                    Navigation.getInstance().getController("login").getCommand(sentence);
+                    System.out.println(sentence);
+                    Navigation.getInstance().getController(HouseController.getNAME()).getCommand(sentence);
+                    //Navigation.getInstance().getController("house").getCommand(sentence);
                 }
                 disconnect();
 
