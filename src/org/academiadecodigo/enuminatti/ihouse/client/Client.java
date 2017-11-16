@@ -3,6 +3,7 @@ package org.academiadecodigo.enuminatti.ihouse.client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.academiadecodigo.enuminatti.ihouse.client.controller.HouseController;
+import org.academiadecodigo.enuminatti.ihouse.client.controller.LoginController;
 import org.academiadecodigo.enuminatti.ihouse.server.model.User;
 import org.academiadecodigo.enuminatti.ihouse.client.service.MockUserService;
 import org.academiadecodigo.enuminatti.ihouse.client.service.UserService;
@@ -23,7 +24,8 @@ public class Client extends Application {
     private UserService userService;
     private Socket clientSocket;
     private ExecutorService executors = Executors.newFixedThreadPool(2);
-    private HouseController controller;
+    private HouseController houseCtrl;
+    private LoginController loginCtrl;
     private ReceiveThread receiveThread;
 
     public static void main(String[] args) {
@@ -38,8 +40,8 @@ public class Client extends Application {
     public void init() {
 
         //Initialize service
-        userService = new MockUserService();
-        userService.addUser(new User("admin", Security.getHash("admin")));
+        //userService = new MockUserService();
+        //userService.addUser(new User("admin", Security.getHash("admin")));
     }
 
     @Override
@@ -47,13 +49,16 @@ public class Client extends Application {
 
         //Show UI
         Navigation.getInstance().setStage(primaryStage);
-        Navigation.getInstance().loadScreen("house");
-        HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
+        Navigation.getInstance().loadScreen("login");
+        //HouseController houseController = (HouseController) Navigation.getInstance().getController("house");
+        LoginController loginController = (LoginController) Navigation.getInstance().getController("login");
         //loginController.setUserService(userService);
 
-        //We need access to the controller from the client, so we store it
-        controller = houseController;
-        controller.setClient(this);
+        //We need access to the controllers from the client, so we store it
+        loginCtrl = loginController;
+        loginCtrl.setClient(this);
+        //houseCtrl = houseController;
+        //houseCtrl.setClient(this);
 
         try {
             //Initialize threads, sockets
@@ -69,7 +74,6 @@ public class Client extends Application {
         }
 
     }
-
 
 
     //------------- WRITE TO SERVER ---------------//
@@ -100,9 +104,7 @@ public class Client extends Application {
     }
 
 
-
-
-//-------------------- THREAD --------------------//
+//----------------- READ THREAD ------------------//
 
 
     class ReceiveThread implements Runnable {
@@ -146,7 +148,7 @@ public class Client extends Application {
 
                 while ((sentence = bufferedReader.readLine()) != null) {
                     System.out.println("------READ BLOCK------");
-                    controller.getCommand(sentence);
+                    houseCtrl.getCommand(sentence);
                 }
                 disconnect();
 
@@ -161,16 +163,16 @@ public class Client extends Application {
         public void run() {
             System.out.println("Invoking the read: " + Thread.currentThread().getName() + "\n");
             read();
-            }
-        }
-
-
-        public void disconnect(){
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
+
+
+    public void disconnect() {
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
