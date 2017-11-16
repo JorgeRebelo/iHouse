@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="401.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../resources/home_layout.png" />
+            <Image url="@/home_layout.png" />
          </image>
       </ImageView>
       <Button fx:id="masterBedroomLightButton" layoutX="284.0" layoutY="71.0" mnemonicParsing="false" onAction="#onMasterBedroomLightButton" text="OFF" />
@@ -27,7 +27,7 @@
          </font></Label>
       <ImageView fitHeight="129.0" fitWidth="126.0" layoutX="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../resources/iHouse_logo.png" />
+            <Image url="@/iHouse_logo.png" />
          </image>
       </ImageView>
       <Button fx:id="masterBedroomBlind" layoutX="275.0" mnemonicParsing="false" onAction="#onMasterBedroomBlind" text="CLOSE" />

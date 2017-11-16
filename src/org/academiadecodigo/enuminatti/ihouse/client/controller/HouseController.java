@@ -180,13 +180,13 @@ public class HouseController implements Controller {
 
                 System.out.println("Platform Runlater: " + Thread.currentThread().getName());
 
-                String[] lamp = serverCommand.split("/");
+                String[] element = serverCommand.split("/");
                 System.out.println("getCommand() executing command: " + serverCommand);
 
-                for (int i = 0; i < lamp.length; i++) {
+                for (int i = 0; i < element.length; i++) {
 
-                    String[] status = lamp[i].split("=");
-                    System.out.println("Lamp :  " + status[0] + status[1] + " ");
+                    String[] status = element[i].split("=");
+                    System.out.println("Element :  " + status[0] + " -> " + status[1] + " ");
 
                     //this is not good yet..
                     switch (status[0]) {
@@ -205,6 +205,19 @@ public class HouseController implements Controller {
                         case "kitchenLightButton":
                             updateLights(kitchenLightButton, status[1]);
                             break;
+                        case "livingroomBlind":
+                            updateBlinds(livingroomBlind, status[1]);
+                            break;
+                        case "kitchenBlind":
+                            updateBlinds(kitchenBlind, status[1]);
+                            break;
+                        case "masterBedroomBlind":
+                            updateBlinds(masterBedroomBlind, status[1]);
+                            break;
+                        case "bedroomBlind":
+                            updateBlinds(bedroomBlind, status[1]);
+                            break;
+
                     }
                 }
             }
