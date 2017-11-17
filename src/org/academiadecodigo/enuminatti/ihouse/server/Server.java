@@ -217,16 +217,20 @@ public class Server {
 
 
             //Send the first update of how the server is currently
-            houseState = readWrite.read("resources/saveFile");
-            writer.println(houseState);
+
             System.out.println(">First update sent" + "\n" + "--------------------");
 
 
             while (true) {
 
+                houseState = readWrite.read("resources/saveFile");
+                writer.println(houseState);
+                System.out.println(houseState + "aaaaaaaa");
+
                 try {
                     //read command from client
                     clientCMD = reader.readLine();
+                    System.out.println(clientCMD + "111111111111111");
                     if (clientCMD == null) {
                         System.out.println("\n>" + user.getUsername() + " disconnected" + "\n" + "------------------");
                         disconnect();

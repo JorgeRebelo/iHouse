@@ -22,7 +22,7 @@ public class ServiceCommunication {
 
     PrintWriter outToServer;
 
-    public ServiceCommunication () {
+    public ServiceCommunication() {
         executors = Executors.newFixedThreadPool(2);
     }
 
@@ -37,7 +37,7 @@ public class ServiceCommunication {
             String sentence;
 
             //loop not working correctly
-            while((sentence = reader.readLine()).equals("false")){
+            while ((sentence = reader.readLine()).equals("false")) {
                 System.out.println(sentence);
                 System.out.println("Not validated");
             }
@@ -47,7 +47,6 @@ public class ServiceCommunication {
             /*while (!(sentence = reader.readLine()).equals("true")){
                 System.out.println("Couldn't authenticate user");
             }*/
-
 
 
             System.out.println("Authenticated!");
@@ -76,7 +75,6 @@ public class ServiceCommunication {
                 outToServer = new PrintWriter(clientSocket.getOutputStream(), true);
             }
             System.out.println("Buffered Writer created.");
-
 
 
             //send command to server
@@ -114,27 +112,16 @@ public class ServiceCommunication {
         //receive status
         public void read() {
 
-            String sentence;
 
             try {
+                String sentence = bufferedReader.readLine();
 
-                while ((sentence = bufferedReader.readLine()) != null) {
+                while (sentence != null) {
                     System.out.println("------READ BLOCK------");
                     System.out.println("RECEIVING: " + sentence);
                     System.out.println(Navigation.getInstance().getController(HouseController.getNAME()));
-                    //Navigation.getInstance().getController("house").getCommand(sentence);
+                    Navigation.getInstance().getController("house").getCommand(sentence);
                 }
-
-
-                boolean sync = false;
-
-                while(!sync){
-                    if(Navigation.getInstance().getController(HouseController.getNAME()) != null){
-                        sync = true;
-                    }
-                }
-
-                Navigation.getInstance().getController(HouseController.getNAME()).getCommand(sentence);
 
                 disconnect();
 
