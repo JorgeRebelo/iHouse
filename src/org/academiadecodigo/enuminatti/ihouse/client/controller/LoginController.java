@@ -99,6 +99,7 @@ public class LoginController implements Controller {
         System.out.println("ESTOU NO LOGIN");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////ISTO E ESTUPIDO ESTAR AQUI
     }
+
     public String sendRequest(){
         String request = null;
 

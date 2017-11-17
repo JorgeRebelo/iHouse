@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by codecadet on 07/11/17.
  */
+
 public class Server {
 
     //will extend application, someday..
@@ -211,6 +212,8 @@ public class Server {
 
 
 
+
+            //Send true to notify you have logged in
 
 
             //Send the first update of how the server is currently

@@ -18,8 +18,9 @@ public class ServiceCommunication {
     private Socket clientSocket;
     private ExecutorService executors;
     private ServiceCommunication.ReceiveThread receiveThread;
+    private boolean loggedin;
 
-    BufferedWriter outToServer;
+    PrintWriter outToServer;
 
     public ServiceCommunication () {
         executors = Executors.newFixedThreadPool(2);
@@ -47,7 +48,6 @@ public class ServiceCommunication {
                 System.out.println("Couldn't authenticate user");
             }*/
 
-            reader.close();
 
 
             System.out.println("Authenticated!");
@@ -63,7 +63,9 @@ public class ServiceCommunication {
         }
     }
 
+
     //------------- WRITE TO SERVER ---------------//
+
     public void write(String command) {
 
         System.out.println("-----WRITE BLOCK------");
@@ -71,15 +73,16 @@ public class ServiceCommunication {
 
         try {
             if (outToServer == null) {
-                outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                outToServer = new PrintWriter(clientSocket.getOutputStream(), true);
             }
             System.out.println("Buffered Writer created.");
 
+
+
             //send command to server
-            outToServer.write(command);
+            outToServer.println(command);
             System.out.println(Thread.currentThread().getName() + " on write()");
-            outToServer.newLine();
-            outToServer.flush();
+
 
             System.out.println("Data flushed to server");
 
@@ -91,6 +94,7 @@ public class ServiceCommunication {
 
         System.out.println("-----------------------" + "\n");
     }
+
 
     //-------------------- THREAD --------------------//
     class ReceiveThread implements Runnable {
@@ -118,8 +122,19 @@ public class ServiceCommunication {
                     System.out.println("------READ BLOCK------");
                     System.out.println("RECEIVING: " + sentence);
                     System.out.println(Navigation.getInstance().getController(HouseController.getNAME()));
-                    Navigation.getInstance().getController("house").getCommand(sentence);
+                    //Navigation.getInstance().getController("house").getCommand(sentence);
                 }
+
+
+                boolean sync = false;
+
+                while(!sync){
+                    if(Navigation.getInstance().getController(HouseController.getNAME()) != null){
+                        sync = true;
+                    }
+                }
+
+                Navigation.getInstance().getController(HouseController.getNAME()).getCommand(sentence);
 
                 disconnect();
 
