@@ -1,14 +1,22 @@
 package org.academiadecodigo.enuminatti.ihouse.client.controller;
 
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import org.academiadecodigo.enuminatti.ihouse.client.Client;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceCommunication;
 import org.academiadecodigo.enuminatti.ihouse.client.service.ServiceRegistry;
 import org.academiadecodigo.enuminatti.ihouse.client.utils.Navigation;
 
+import java.sql.Time;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +30,7 @@ public class HouseController implements Controller {
     private String houseStatus;
     static ServiceCommunication serviceCommunication1;
     private List<Button> elements;
+    RotateTransition transition = null;
 
     @FXML
     private Button masterBedroomLightButton;
@@ -56,15 +65,19 @@ public class HouseController implements Controller {
     @FXML
     private Button bedroomBlind;
 
+    @FXML
+    private ImageView bathroomFun;
+
 
     //----------BUTTON METHODS----------//
     @FXML
     void onBathroomLightButton(ActionEvent event) {
 
         updateLights(bathroomLightButton, bathroomLightButton.getText());
+        serviceCommunication1.write(getHouseStatus());
+
         //bathroomLightButton.setStyle("-fx-background-radius: 5em");
 
-        serviceCommunication1.write(getHouseStatus());
 
     }
 
@@ -143,11 +156,11 @@ public class HouseController implements Controller {
         serviceCommunication1.write(getHouseStatus());
     }
 
-
     //---------CONTROLLER METHODS----------//
     @FXML
     public void initialize() {
 
+        transition = new RotateTransition();
         elements = new LinkedList<>();
         elements.add(masterBedroomLightButton);
         elements.add(bedroomLightButton);
@@ -192,6 +205,10 @@ public class HouseController implements Controller {
                             updateLights(bedroomLightButton, status[1]);
                             break;
                         case "bathroomLightButton":
+                            if (status[1].equals("1")) {
+                                rotateFun("1");
+                            }
+                            rotateFun("0");
                             updateLights(bathroomLightButton, status[1]);
                             break;
                         case "kitchenLightButton":
@@ -261,6 +278,38 @@ public class HouseController implements Controller {
         System.out.println("Client house updated!");
         System.out.println("-----------------------" + "\n");
         return houseStatus;
+    }
+
+    public void rotateFun(String s) {
+        /*RotateTransition rotateTransition;
+        rotateTransition = new RotateTransition(Duration.INDEFINITE, bathroomFun);
+
+        if (s.equals("1")) {
+            rotateTransition.setFromAngle(0);
+            rotateTransition.setToAngle(720);
+            rotateTransition.setCycleCount(Timeline.INDEFINITE);
+            rotateTransition.setAutoReverse(true);
+
+            rotateTransition.play();
+        }
+
+        rotateTransition.stop();
+    }*/
+
+        System.out.println("rotate fun  --->" + s);
+
+
+
+        if (s.equals("1")) {
+
+            transition.setNode(bathroomFun);
+            transition.setByAngle(360);
+            transition.setCycleCount(Timeline.INDEFINITE);
+            transition.play();
+            System.out.println(transition);
+            return;
+        }
+       // transition.stop();
     }
 
 
