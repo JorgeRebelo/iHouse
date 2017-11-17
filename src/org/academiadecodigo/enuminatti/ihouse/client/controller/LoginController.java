@@ -53,9 +53,9 @@ public class LoginController implements Controller {
     @FXML
     void onIntroLoginButton(ActionEvent event) {
 
-        ipField.setText("admin"); //////////////////////////////////////////////////////////////////////////////////////
-        usernameField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
-        passwordField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
+        //ipField.setText("admin"); //////////////////////////////////////////////////////////////////////////////////////
+        //usernameField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
+        //passwordField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
 
         if (ipField.getText().isEmpty()) {
             ipNotFoundLabel.setVisible(true);
@@ -83,7 +83,7 @@ public class LoginController implements Controller {
         if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
             //if (serviceCommunication.initiateConnection(ipField.getText())) {  ///////////////////////////////////////
             System.out.println("CENAS" + serviceCommunication);
-            serviceCommunication.initiateConnection("localhost");
+            serviceCommunication.initiateConnection(ipField.getText());
             HouseController.setServiceCommunication(serviceCommunication);
             Navigation.getInstance().loadScreen(HouseController.getNAME());
 
