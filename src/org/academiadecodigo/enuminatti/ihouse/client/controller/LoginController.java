@@ -53,9 +53,7 @@ public class LoginController implements Controller {
     @FXML
     void onIntroLoginButton(ActionEvent event) {
 
-        ipField.setText("admin"); //////////////////////////////////////////////////////////////////////////////////////
-        usernameField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
-        passwordField.setText("admin"); ////////////////////////////////////////////////////////////////////////////////
+
 
         if (ipField.getText().isEmpty()) {
             ipNotFoundLabel.setVisible(true);
@@ -72,25 +70,23 @@ public class LoginController implements Controller {
             return;
         }
 
-        userService = (UserService) ServiceRegistry.getServiceRegistry().getService(UserService.class.getSimpleName());
-
-        if (userService == null) {
-            throw new IllegalStateException("Unable to load user service from registry");
-        }
-
         serviceCommunication = new ServiceCommunication();
+        serviceCommunication.initiateConnection("localhost", sendRequest());
+        HouseController.setServiceCommunication(serviceCommunication);
 
-        if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
+        Navigation.getInstance().getController("house");
+        Navigation.getInstance().loadScreen(HouseController.getNAME());
+
+        /*if (userService.authenticate(usernameField.getText(), passwordField.getText())) {
             //if (serviceCommunication.initiateConnection(ipField.getText())) {  ///////////////////////////////////////
             System.out.println("CENAS" + serviceCommunication);
-            serviceCommunication.initiateConnection("localhost");
-            HouseController.setServiceCommunication(serviceCommunication);
+            //serviceCommunication.initiateConnection("localhost");
             Navigation.getInstance().loadScreen(HouseController.getNAME());
 
 
         } else {
             wrongPasswordLabel.setVisible(true);
-        }
+        }*/
 
     }
 
@@ -103,6 +99,7 @@ public class LoginController implements Controller {
         System.out.println("ESTOU NO LOGIN");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////ISTO E ESTUPIDO ESTAR AQUI
     }
+
     public String sendRequest(){
         String request = null;
 

@@ -12,6 +12,8 @@ public class UserManager {
     public UserManager(){
         users = new LinkedList<>();
         users.add(new User("Drake", "lol"));
+        users.add(new User("Luis", "naosei"));
+        users.add(new User("Joao", "muitocomplexa"));
         users.add(new User("lol", "lol"));
         users.add(new User("123", "123"));
         users.add(new User("aaa", "aaa"));
