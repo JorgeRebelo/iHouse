@@ -114,9 +114,9 @@ public class ServiceCommunication {
 
 
             try {
-                String sentence = bufferedReader.readLine();
+                String sentence;
 
-                while (sentence != null) {
+                while ((sentence= bufferedReader.readLine()) != null) {
                     System.out.println("------READ BLOCK------");
                     System.out.println("RECEIVING: " + sentence);
                     System.out.println(Navigation.getInstance().getController(HouseController.getNAME()));

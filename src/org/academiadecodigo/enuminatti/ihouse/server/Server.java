@@ -225,12 +225,12 @@ public class Server {
 
                 houseState = readWrite.read("resources/saveFile");
                 writer.println(houseState);
-                System.out.println(houseState + "aaaaaaaa");
+                System.out.println(houseState);
 
                 try {
                     //read command from client
                     clientCMD = reader.readLine();
-                    System.out.println(clientCMD + "111111111111111");
+                    System.out.println(clientCMD);
                     if (clientCMD == null) {
                         System.out.println("\n>" + user.getUsername() + " disconnected" + "\n" + "------------------");
                         disconnect();
